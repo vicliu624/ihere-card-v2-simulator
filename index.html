@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive static prototype for the iHere Card V2 six-key interaction model." />
+    <title>iHere Card V2 Simulator</title>
+    <link rel="stylesheet" href="styles.css?v=mobile-control-spacing-v10" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-intro">
+        <p class="eyebrow">STATIC INTERACTION PROTOTYPE</p>
+        <h1>iHere Card V2 simulator</h1>
+        <p>
+          A browser simulation of the 128×64, six-key iHere Card. The control panel is external to
+          the card; only the six labelled hardware keys belong to the simulated device.
+        </p>
+      </header>
+
+      <section class="simulator-layout" aria-label="iHere Card V2 interactive simulator">
+        <aside class="simulation-panel" aria-label="External simulation controls">
+          <div class="panel-heading">
+            <p class="eyebrow">NOT ON DEVICE</p>
+            <h2>Simulation controls</h2>
+          </div>
+
+          <button class="sim-action sim-action-match" id="trigger-match" type="button">
+            Trigger match
+            <span>Inject an authenticated INVESTOR match</span>
+          </button>
+          <button class="sim-action" id="end-match" type="button">
+            End match
+            <span>End the simulated radio liveness window</span>
+          </button>
+          <button class="sim-action" id="reset-card" type="button">
+            Reset card
+            <span>Restore the default in-memory demo state</span>
+          </button>
+
+          <label class="scenario-label" for="scenario-select">Load a V2 screen scenario</label>
+          <select id="scenario-select" class="scenario-select">
+            <optgroup label="Normal interaction">
+              <option value="home">Home · FOUNDER / HIGH</option>
+              <option value="home-med">Home · MAKER / MED</option>
+              <option value="home-low">Home · DESIGNER / LOW</option>
+              <option value="home-none">Home · FOUNDER / NONE</option>
+              <option value="home-no-tag">Home · no MY TAG</option>
+              <option value="home-limited">Home · Heat limited</option>
+              <option value="home-silent">Home · Silent on</option>
+              <option value="menu">Menu · MY TAGS</option>
+              <option value="my-tags">MY TAGS · browse</option>
+              <option value="my-empty">MY TAGS · empty</option>
+              <option value="long-tag">MY TAGS · long TAG</option>
+              <option value="my-actions">MY TAGS · action menu</option>
+              <option value="find-tags">FIND TAG · browse</option>
+              <option value="find-empty">FIND TAG · empty</option>
+              <option value="find-actions">FIND TAG · action menu</option>
+              <option value="add-empty">ADD TAG · empty draft</option>
+              <option value="add-draft">ADD TAG · draft</option>
+              <option value="edit-draft">EDIT TAG · draft</option>
+              <option value="editor-menu">EDIT MENU</option>
+              <option value="autofill">AUTOFILL</option>
+              <option value="save-confirm">SAVE confirmation</option>
+              <option value="saved">SAVED result</option>
+              <option value="delete-confirm">DELETE confirmation</option>
+              <option value="deleted">DELETED result</option>
+              <option value="leave-edit">LEAVE EDIT confirmation</option>
+              <option value="settings">SILENT settings</option>
+              <option value="settings-on">SILENT on</option>
+              <option value="info">INFO · battery</option>
+              <option value="info-version">INFO · version</option>
+              <option value="info-card-id">INFO · card ID</option>
+              <option value="match-muted">MATCH · muted result</option>
+              <option value="tag-exists">NOTICE · TAG EXISTS</option>
+              <option value="tag-full">FULL · 10/10</option>
+              <option value="storage-error">ERROR · SAVE FAIL</option>
+            </optgroup>
+            <optgroup label="Startup and lifecycle">
+              <option value="boot-logo">Boot · logo</option>
+              <option value="boot-starting">Boot · starting</option>
+              <option value="boot-loading">Boot · loading</option>
+              <option value="provision-pre">PRE_PROVISION</option>
+              <option value="provisioning">PROVISIONING</option>
+              <option value="provision-ready">READY / AUTH OK</option>
+              <option value="provision-failed">PROVISION FAILED</option>
+              <option value="provision-limited">LIMITED</option>
+              <option value="provision-revoked">REVOKED</option>
+              <option value="rma">RMA REQUIRED</option>
+            </optgroup>
+          </select>
+
+          <details class="state-panel" open>
+            <summary>Live simulator state</summary>
+            <dl id="state-readout"></dl>
+          </details>
+        </aside>
+
+        <section class="card-stage" aria-label="iHere Card V2 hardware">
+          <div class="card-shadow" aria-hidden="true"></div>
+          <article class="ihere-card" aria-label="Simulated iHere Card V2">
+            <div class="card-topline">
+              <span class="card-wordmark">iHere<span>.no</span><sup>®</sup></span>
+              <span class="device-label">V2 / 128×64</span>
+            </div>
+
+            <div class="led-rail" aria-label="Two Match LEDs">
+              <span class="led" id="led-left" aria-label="Left Match LED"></span>
+              <span class="led-label">MATCH</span>
+              <span class="led" id="led-right" aria-label="Right Match LED"></span>
+            </div>
+
+            <div class="screen-bezel">
+              <canvas id="device-screen" width="128" height="64" aria-label="128 by 64 monochrome iHere Card screen"></canvas>
+              <span class="screen-spec">128 × 64 OLED</span>
+            </div>
+
+            <div class="hardware-controls" aria-label="Six device buttons">
+              <div class="control-rail" aria-label="Right-hand hardware control rail">
+                <div class="navigation-cluster" aria-label="Navigation control group">
+                  <div class="navigation-rocker">
+                    <button class="device-key key-up" data-key="UP" type="button"><span>UP</span></button>
+                    <button class="device-key key-ok" data-key="OK" type="button"><span>OK</span></button>
+                    <button class="device-key key-down" data-key="DOWN" type="button"><span>DOWN</span></button>
+                  </div>
+                </div>
+
+                <button class="device-key key-menu" data-key="MENU" type="button"><span>MENU</span></button>
+
+                <div class="back-cluster" aria-label="Back control">
+                  <div class="decision-pair">
+                    <button class="device-key key-back" data-key="BACK" type="button"><span>BACK</span></button>
+                  </div>
+                </div>
+
+                <button class="device-key key-mute" data-key="MUTE" type="button"><span>MUTE</span></button>
+              </div>
+            </div>
+
+            <p class="device-footnote">Six labelled keys are the only simulated device inputs.</p>
+          </article>
+
+          <aside class="layout-callouts" aria-label="Control layout design rationale">
+            <article class="callout callout-navigate">
+              <p class="eyebrow">ONE-THUMB INPUT GROUP</p>
+              <h3>UP · OK · DOWN</h3>
+              <p>Natural editing repeats one loop: move with UP/DOWN, act with OK, then move again. Their shared rail makes that sequence visible before use.</p>
+            </article>
+            <article class="callout callout-menu">
+              <p class="eyebrow">TASK CONTROL</p>
+              <h3>MENU · BACK</h3>
+              <p>Enter a task level or return from it. Same size; BACK uses a darker color.</p>
+            </article>
+            <article class="callout callout-mute">
+              <p class="eyebrow">ALERT INTERRUPT</p>
+              <h3>MUTE</h3>
+              <p>Red and separate because it stops the current Match, not normal navigation.</p>
+            </article>
+          </aside>
+        </section>
+      </section>
+    </main>
+
+    <script src="tag-vocabulary.js?v=canonical-1019"></script>
+    <script src="app.js?v=canonical-autofill-v10"></script>
+  </body>
+</html>
