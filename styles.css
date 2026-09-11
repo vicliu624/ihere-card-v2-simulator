@@ -105,7 +105,8 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 0.98
 .ihere-card .card-topline, .ihere-card .card-wordmark span { color: #b8bbb4; }
 .ihere-card .device-label { color: #90968b; border-color: #565b50; background: #191c17; }
 .ihere-card .led-rail { color: #b2b9aa; }
-.ihere-card .screen-bezel { border-color: #353932; background: #070a07; box-shadow: inset 0 0 0 2px #707667, inset 0 0 12px #000; }
+.ihere-card .screen-bezel { left: 8%; border-color: #353932; background: #070a07; box-shadow: inset 0 0 0 2px #707667, inset 0 0 12px #000; }
+.ihere-card .hardware-controls .control-rail { right: 8%; }
 .ihere-card .screen-spec { color: #9aab8f; }
 .ihere-card .device-key { border-color: #6a6e64; color: #ffe5c5; background: linear-gradient(110deg, #a64b14, #7b2c05); box-shadow: inset 0 0 0 3px #663012, inset 0 2px 2px #df8544, 0 3px 0 #2c2e28, 0 5px 5px #0009; }
 .ihere-card .key-back { color: #e0e5d9; background: linear-gradient(120deg, #555c4f, #30362c); box-shadow: inset 0 0 0 3px #343b2e, inset 0 2px 2px #7e8774, 0 3px 0 #1c2118, 0 5px 5px #0009; }
