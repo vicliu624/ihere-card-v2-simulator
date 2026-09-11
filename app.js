@@ -21,8 +21,10 @@
 
   const menuItems = ["MY TAGS", "FIND TAG", "SETTINGS", "INFO"];
   const actionItems = ["ADD", "EDIT", "DELETE", "BACK"];
-  const editorItems = ["AUTOFILL", "DONE", "CLEAR", "LEAVE EDIT"];
+  const editorItems = ["DONE", "CLEAR", "LEAVE EDIT"];
   const vocabulary = Array.isArray(window.IHERE_VOCABULARY) ? window.IHERE_VOCABULARY : [];
+  // Default sort compares ASCII/code-unit order, not locale collation.
+  const completionWords = vocabulary.filter(word => typeof word === "string" && word.length > 0 && word.length <= 20).slice().sort();
 
   const dom = {
     leds: [document.getElementById("led-left"), document.getElementById("led-right")],
@@ -49,8 +51,6 @@
     slots: Array(20).fill(""),
     cursor: 0,
     editorIndex: 0,
-    suggestionIndex: 0,
-    suggestions: [],
     silent: false,
     infoIndex: 0,
     confirm: null,
@@ -157,9 +157,8 @@
   function drawSlots() {
     state.slots.forEach((char, index) => { const row = Math.floor(index / 10); const column = index % 10; const x = 9 + column * 11; const y = 22 + row * 12; if (index === state.cursor) { fill(x, y, 10, 9); if (char) text(x + 3, y + 1, char, 1, false); } else { rect(x, y, 10, 9); if (char) text(x + 3, y + 1, char); } });
   }
-  function renderDraft() { header(state.draftMode === "add" ? "ADD TAG" : "EDIT TAG"); text(8, 13, "DRAFT:"); text(45, 13, draftText() || "_"); drawSlots(); center(45, `CURSOR ${state.cursor + 1}/20`); footer("MENU ▲ ▼ BACK OK"); }
+  function renderDraft() { header(state.draftMode === "add" ? "ADD TAG" : "EDIT TAG"); text(8, 13, "DRAFT:"); text(45, 13, wrapped(draftText() || "_", 13)); drawSlots(); center(45, `CURSOR ${state.cursor + 1}/20`); footer("MENU ▲ ▼ BACK OK"); }
   function renderEditorMenu() { renderList("EDIT MENU", editorItems, state.editorIndex); }
-  function renderAutofill() { header("AUTOFILL"); state.suggestions.forEach((candidate, index) => { const y = 11 + index * 7; if (index === state.suggestionIndex) { fill(6, y - 1, 116, 8); text(10, y, candidate, 1, false); } else text(10, y, candidate); }); footer("▲ ▼ BACK OK"); }
   function renderConfirm() { header(state.confirm.title); rect(12, 18, 104, 23); const scale = textWidth(state.confirm.value, 2) <= 90 ? 2 : 1; center(25, state.confirm.value, scale); footer("BACK OR OK"); }
   function renderNotice() { header(state.notice.title); rect(12, 17, 104, 29); center(23, state.notice.primary); center(35, state.notice.secondary); footer(state.notice.help || "BACK"); }
   function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); if (!state.silent) { fill(24, 31, 37, 11); text(34, 33, "OFF", 1, false); text(75, 33, "ON"); } else { text(34, 33, "OFF"); fill(67, 31, 37, 11); text(79, 33, "ON", 1, false); } center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ BACK OK"); }
@@ -180,7 +179,6 @@
     else if (state.page === "action") renderAction();
     else if (state.page === "draft") renderDraft();
     else if (state.page === "editorMenu") renderEditorMenu();
-    else if (state.page === "autofill") renderAutofill();
     else if (state.page === "settings") renderSettings();
     else if (state.page === "info") renderInfo();
     else if (["match", "muted"].includes(state.page)) renderMatch();
@@ -200,10 +198,15 @@
   function enterCollection(collection) { state.collection = collection; state.collectionIndex = 0; state.page = collection === "my" ? "myBrowse" : "findBrowse"; }
   function startDraft(collection, mode = "add") { state.collection = collection; state.draftCollection = collection; state.draftMode = mode; const tags = currentTags(); const current = tags[state.collectionIndex] || ""; setDraft(mode === "edit" ? current : ""); state.page = "draft"; }
   function showNotice(title, primary, secondary, returnPage) { state.notice = { title, primary, secondary, returnPage }; state.page = "notice"; }
-  function getSuggestions() {
-    const prefix = draftText();
-    if (!prefix) return ["KEEP INPUT"];
-    return [...vocabulary.filter((item) => item.startsWith(prefix)).slice(0, 5), "KEEP INPUT"];
+  function completeFromCursor() {
+    const prefixSlots = state.slots.slice(0, state.cursor + 1);
+    // Old completion is replaceable; it must never become part of the lookup prefix.
+    state.slots.fill("", state.cursor + 1);
+    if (prefixSlots.some(char => !char)) return;
+    const match = completionWords.find(word => word.startsWith(prefixSlots.join("")));
+    if (match) {
+      for (let index = state.cursor + 1; index < match.length; index += 1) state.slots[index] = match[index];
+    }
   }
   function finishDraft() {
     const tag = draftText(); const tags = state.draftCollection === "my" ? state.myTags : state.findTags;
@@ -215,7 +218,7 @@
   }
   function commitSave() { const tags = state.draftCollection === "my" ? state.myTags : state.findTags; tags[state.collectionIndex] = draftText(); showNotice("SAVED", draftText(), "RETURNING", state.draftCollection === "my" ? "myBrowse" : "findBrowse"); }
   function deleteAtCursor() { state.slots.splice(state.cursor, 1); state.slots.push(""); }
-  function cycleCharacter() { const current = state.slots[state.cursor] || ""; const next = CHARACTERS[(CHARACTERS.indexOf(current) + 1) % CHARACTERS.length]; state.slots[state.cursor] = next; if (!next) deleteAtCursor(); }
+  function cycleCharacter() { const current = state.slots[state.cursor] || ""; const next = CHARACTERS[(CHARACTERS.indexOf(current) + 1) % CHARACTERS.length]; state.slots[state.cursor] = next; completeFromCursor(); }
   function beginMatch() { if (state.lifecycle || state.page === "match") return; state.resumePage = state.page; state.match = { tag: "INVESTOR" }; state.page = "match"; state.blink = true; }
   function muteMatch() { if (state.page !== "match") return; state.page = "muted"; state.blink = false; setTimeout(() => { if (state.page === "muted") { state.match = null; state.page = "home"; render(); } }, 900); }
   function endMatch() { if (!state.match) return; state.match = null; state.page = state.resumePage === "match" ? "home" : state.resumePage; render(); }
@@ -261,11 +264,7 @@
     } else if (state.page === "editorMenu") {
       if (key === "UP" || key === "DOWN") state.editorIndex = mod(state.editorIndex + (key === "DOWN" ? 1 : -1), editorItems.length);
       else if (key === "CANCEL") state.page = "draft";
-      else if (key === "OK") { const action = editorItems[state.editorIndex]; if (action === "AUTOFILL") { state.suggestions = getSuggestions(); state.suggestionIndex = 0; state.page = "autofill"; } else if (action === "DONE") finishDraft(); else if (action === "CLEAR") { setDraft(""); state.page = "draft"; } else { state.confirm = { title: "LEAVE EDIT?", value: "DISCARD DRAFT", action: "leave" }; state.page = "leaveConfirm"; } }
-    } else if (state.page === "autofill") {
-      if (key === "UP" || key === "DOWN") state.suggestionIndex = mod(state.suggestionIndex + (key === "DOWN" ? 1 : -1), state.suggestions.length);
-      else if (key === "CANCEL" || key === "MENU") state.page = "draft";
-      else if (key === "OK") { const choice = state.suggestions[state.suggestionIndex]; if (choice !== "KEEP INPUT") setDraft(choice); state.page = "draft"; }
+      else if (key === "OK") { const action = editorItems[state.editorIndex]; if (action === "DONE") finishDraft(); else if (action === "CLEAR") { setDraft(""); state.page = "draft"; } else { state.confirm = { title: "LEAVE EDIT?", value: "DISCARD DRAFT", action: "leave" }; state.page = "leaveConfirm"; } }
     } else if (state.page === "settings") {
       if (key === "UP" || key === "DOWN") state.silent = key === "DOWN";
       else if (key === "CANCEL" || key === "MENU") state.page = "menu";
@@ -302,8 +301,8 @@
     else if (scenario === "add-empty") startDraft("my");
     else if (scenario === "add-draft") { startDraft("my"); setDraft("WEB3.0"); state.cursor = 5; }
     else if (scenario === "edit-draft") startDraft("my", "edit");
-    else if (scenario === "editor-menu") { startDraft("my", "edit"); state.page = "editorMenu"; state.editorIndex = 1; }
-    else if (scenario === "autofill") { startDraft("my"); setDraft("FO"); state.suggestions = getSuggestions(); state.page = "autofill"; }
+    else if (scenario === "editor-menu") { startDraft("my", "edit"); state.page = "editorMenu"; state.editorIndex = 0; }
+    else if (scenario === "autofill") { startDraft("my"); state.slots[0] = "A"; completeFromCursor(); }
     else if (scenario === "save-confirm") { startDraft("my", "edit"); state.confirm = { title: "SAVE?", value: "FOUNDER", action: "save" }; state.page = "confirm"; }
     else if (scenario === "saved") showNotice("SAVED", "FOUNDER", "RETURNING", "myBrowse");
     else if (scenario === "delete-confirm") { enterCollection("my"); state.confirm = { title: "DELETE?", value: "FOUNDER", action: "delete" }; state.page = "confirm"; }
