@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Interactive static prototype for the iHere Card V2 six-key interaction model." />
+    <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=mobile-control-spacing-v10" />
+    <link rel="stylesheet" href="styles.css?v=side-wheel-v11" />
   </head>
   <body>
     <main class="page-shell">
@@ -13,8 +13,8 @@
         <p class="eyebrow">STATIC INTERACTION PROTOTYPE</p>
         <h1>iHere Card V2 simulator</h1>
         <p>
-          A browser simulation of the 128×64, six-key iHere Card. The control panel is external to
-          the card; only the six labelled hardware keys belong to the simulated device.
+          A 128×64 iHere Card with MENU, BACK and MUTE on the front and a pressable wheel on the right edge.
+          Scroll or swipe the wheel to move; click or tap it to confirm.
         </p>
       </header>
 
@@ -115,15 +115,8 @@
               <span class="screen-spec">128 × 64 OLED</span>
             </div>
 
-            <div class="hardware-controls" aria-label="Six device buttons">
+            <div class="hardware-controls" aria-label="Three front buttons and a side wheel">
               <div class="control-rail" aria-label="Right-hand hardware control rail">
-                <div class="navigation-cluster" aria-label="Navigation control group">
-                  <div class="navigation-rocker">
-                    <button class="device-key key-up" data-key="UP" type="button"><span>UP</span></button>
-                    <button class="device-key key-ok" data-key="OK" type="button"><span>OK</span></button>
-                    <button class="device-key key-down" data-key="DOWN" type="button"><span>DOWN</span></button>
-                  </div>
-                </div>
 
                 <button class="device-key key-menu" data-key="MENU" type="button"><span>MENU</span></button>
 
@@ -135,16 +128,18 @@
 
                 <button class="device-key key-mute" data-key="MUTE" type="button"><span>MUTE</span></button>
               </div>
+              <button id="side-wheel" class="side-wheel" type="button" aria-label="Side wheel: scroll up or down, press to confirm" aria-describedby="wheel-help">
+                <span class="wheel-drum" aria-hidden="true"></span>
+              </button>
             </div>
 
-            <p class="device-footnote">Six labelled keys are the only simulated device inputs.</p>
           </article>
 
           <aside class="layout-callouts" aria-label="Control layout design rationale">
             <article class="callout callout-navigate">
-              <p class="eyebrow">ONE-THUMB INPUT GROUP</p>
-              <h3>UP · OK · DOWN</h3>
-              <p>Natural editing repeats one loop: move with UP/DOWN, act with OK, then move again. Their shared rail makes that sequence visible before use.</p>
+              <p class="eyebrow">RIGHT-EDGE WHEEL</p>
+              <h3>ROLL TO MOVE · PRESS TO CONFIRM</h3>
+              <p id="wheel-help">One thumb moves and confirms in the same place. Scroll up/down with a mouse, or swipe up/down on the wheel with a finger. Click or tap to confirm.</p>
             </article>
             <article class="callout callout-menu">
               <p class="eyebrow">TASK CONTROL</p>
@@ -162,6 +157,6 @@
     </main>
 
     <script src="tag-vocabulary.js?v=canonical-1019"></script>
-    <script src="app.js?v=canonical-autofill-v10"></script>
+    <script src="app.js?v=side-wheel-v11"></script>
   </body>
 </html>

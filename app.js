@@ -322,6 +322,51 @@
   }
 
   dom.keys.forEach((button) => button.addEventListener("click", () => press(button.dataset.key)));
+  const wheel = document.getElementById("side-wheel");
+  let wheelOffset = 0;
+  let wheelDelta = 0;
+  let lastWheelTime = 0;
+  let gesture = null;
+  let suppressWheelClick = false;
+  function rollWheel(direction) {
+    wheelOffset += direction * 6;
+    wheel.style.setProperty("--wheel-offset", `${wheelOffset}px`);
+    press(direction > 0 ? "DOWN" : "UP");
+  }
+  wheel.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 240 : 1);
+    if (!delta) return;
+    if (event.timeStamp - lastWheelTime > 180 || Math.sign(delta) !== Math.sign(wheelDelta)) wheelDelta = 0;
+    lastWheelTime = event.timeStamp;
+    wheelDelta += delta;
+    const steps = Math.min(5, Math.floor(Math.abs(wheelDelta) / 40));
+    for (let i = 0; i < steps; i++) rollWheel(Math.sign(delta));
+    if (steps) wheelDelta %= 40;
+  }, { passive: false });
+  wheel.addEventListener("pointerdown", (event) => {
+    if (!event.isPrimary || event.button !== 0) return;
+    suppressWheelClick = false;
+    gesture = { id: event.pointerId, y: event.clientY, startY: event.clientY, startX: event.clientX };
+    wheel.setPointerCapture(event.pointerId);
+  });
+  wheel.addEventListener("pointermove", (event) => {
+    if (!gesture || gesture.id !== event.pointerId) return;
+    if (Math.hypot(event.clientY - gesture.startY, event.clientX - gesture.startX) > 7) suppressWheelClick = true;
+    const delta = event.clientY - gesture.y;
+    const steps = Math.floor(Math.abs(delta) / 18);
+    for (let i = 0; i < steps; i++) rollWheel(Math.sign(delta));
+    if (steps) gesture.y += Math.sign(delta) * steps * 18;
+  });
+  wheel.addEventListener("pointerup", () => { gesture = null; });
+  wheel.addEventListener("pointercancel", () => { gesture = null; suppressWheelClick = true; });
+  wheel.addEventListener("lostpointercapture", () => { gesture = null; });
+  wheel.addEventListener("click", (event) => {
+    if (suppressWheelClick && event.detail !== 0) { suppressWheelClick = false; return; }
+    press("OK");
+    wheel.classList.add("is-pressed");
+    setTimeout(() => wheel.classList.remove("is-pressed"), 140);
+  });
   dom.trigger.addEventListener("click", () => { beginMatch(); render(); });
   dom.endMatch.addEventListener("click", endMatch);
   dom.reset.addEventListener("click", resetCard);
