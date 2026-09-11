@@ -330,7 +330,7 @@
   let suppressWheelClick = false;
   function rollWheel(direction) {
     wheelOffset += direction * 6;
-    wheel.style.setProperty("--wheel-offset", `${wheelOffset}px`);
+    wheel.style.setProperty("--wheel-angle", `${wheelOffset}deg`);
     press(direction > 0 ? "DOWN" : "UP");
   }
   wheel.addEventListener("wheel", (event) => {

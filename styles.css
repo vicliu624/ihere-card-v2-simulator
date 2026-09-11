@@ -9,8 +9,14 @@
 
 /* The front face and the edge wheel share the card's coordinate system. */
 .side-wheel { position: absolute; z-index: 2; top: 21%; right: -17px; width: 44px; height: 114px; padding: 10px 4px 10px 15px; border: 0; border-radius: 15px; background: transparent; touch-action: none; user-select: none; -webkit-user-select: none; cursor: ns-resize; }
-.side-wheel::before { content: ""; position: absolute; inset: 4px 12px 4px 9px; border-radius: 9px; background: #17313b; box-shadow: inset 3px 0 5px #07171e; }
-.wheel-drum { position: relative; display: block; width: 100%; height: 100%; border: 1px solid #203842; border-radius: 8px; background: linear-gradient(90deg, rgba(6,20,28,.9), transparent 42%, rgba(220,238,242,.3) 68%, rgba(5,20,28,.8)), repeating-linear-gradient(0deg, #283f49 0 2px, #a5b8bf 2px 4px, #536b75 4px 6px); background-position: 0 0, 0 var(--wheel-offset, 0px); box-shadow: 3px 2px 4px #06121a99; transition: transform 100ms; }
+.side-wheel::before { content: ""; position: absolute; width: 98px; height: 98px; right: 5px; top: 8px; border-radius: 50%; background: #102630; clip-path: inset(0 0 0 72px); }
+.side-wheel { overflow: hidden; }
+.side-wheel .wheel-drum { clip-path: inset(0 0 0 66px); }
+@media (max-width: 700px) {
+  .side-wheel .wheel-drum { width: 70px; height: 70px; top: 5px; clip-path: inset(0 0 0 46px); }
+  .side-wheel::before { width: 74px; height: 74px; top: 3px; clip-path: inset(0 0 0 50px); }
+}
+.wheel-drum { position: absolute; display: block; width: 94px; height: 94px; right: 4px; top: 10px; border: 1px solid #203842; border-radius: 50%; background: radial-gradient(circle, #425b66 0 58%, transparent 59%), repeating-conic-gradient(from var(--wheel-angle, 0deg), #b8cbd0 0deg 2deg, #324b56 2deg 8deg, #132b35 8deg 10deg); box-shadow: inset 0 0 0 3px #1a323c, inset 0 0 0 5px #9aafb8, 2px 1px 3px #06121a99; transition: transform 100ms; }
 .side-wheel:active .wheel-drum, .side-wheel.is-pressed .wheel-drum { transform: translateX(-3px); }
 .side-wheel:focus-visible { outline: 2px solid #84d8d2; outline-offset: 3px; }
 @media (max-width: 1250px) { .layout-callouts .callout { transform: none; } }
