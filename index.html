@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=front-align-v13" />
+    <link rel="stylesheet" href="styles.css?v=concept-shell-v14" />
   </head>
   <body>
     <main class="page-shell">
@@ -99,6 +99,38 @@
         <section class="card-stage" aria-label="iHere Card V2 hardware">
           <div class="card-shadow" aria-hidden="true"></div>
           <article class="ihere-card" aria-label="Simulated iHere Card V2">
+            <svg class="concept-shell" viewBox="0 0 479 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="shell-metal" x1="0" y1="0" x2="1" y2="0.35">
+                  <stop offset="0" stop-color="#858684"/><stop offset="0.12" stop-color="#636462"/>
+                  <stop offset="0.65" stop-color="#525351"/><stop offset="1" stop-color="#373936"/>
+                </linearGradient>
+                <linearGradient id="shell-bevel" x2="0.85" y2="1">
+                  <stop stop-color="#999b98"/><stop offset="0.48" stop-color="#555753"/><stop offset="1" stop-color="#292b28"/>
+                </linearGradient>
+                <radialGradient id="screw-metal" cx="0.3" cy="0.25">
+                  <stop stop-color="#a1a39e"/><stop offset="0.55" stop-color="#62655e"/><stop offset="1" stop-color="#262923"/>
+                </radialGradient>
+              </defs>
+              <path fill="url(#shell-metal)" stroke="#92958d" stroke-width="1.3" d="M40 1 H438 Q477 1 478 42 V342 Q478 348 471 355 L465 363 Q462 367 462 375 V482 Q462 488 468 494 L475 502 Q478 506 478 513 V718 Q478 759 438 759 H340 Q334 759 330 753 L321 743 Q317 738 311 738 H168 Q162 738 158 743 L149 754 Q145 759 139 759 H40 Q1 759 1 718 V546 L10 536 Q13 533 13 527 V234 Q13 229 9 225 L1 218 V42 Q1 1 40 1 Z"/>
+              <path fill="#070807" stroke="url(#shell-bevel)" stroke-width="7" d="M27 19 H450 V726 H27 Z"/>
+              <path fill="none" stroke="#252723" stroke-width="2" d="M31 23 H446 V722 H31 Z"/>
+              <g fill="url(#screw-metal)" stroke="#30332c" stroke-width="1">
+                <circle cx="15" cy="44" r="8"/><circle cx="463" cy="44" r="8"/>
+                <circle cx="40" cy="708" r="10"/><circle cx="438" cy="708" r="10"/>
+              </g>
+              <g fill="#11140f" stroke="#73766d" stroke-width="0.8">
+                <path d="M12 41 H18 V47 H12 Z M460 41 H466 V47 H460 Z"/>
+                <path d="M36 705 L40 703 L44 705 V711 L40 713 L36 711 Z M434 705 L438 703 L442 705 V711 L438 713 L434 711 Z"/>
+              </g>
+              <rect x="458" y="531" width="15" height="151" rx="7.5" fill="#191c17" stroke="#767a70" stroke-width="2"/>
+              <rect x="462" y="536" width="6" height="140" rx="3" fill="#0a1018" stroke="#363c31"/>
+              <g fill="#080b07" stroke="#93988b" stroke-width="1.5">
+                <rect x="64" y="736" width="42" height="9" rx="4.5"/>
+                <rect x="373" y="736" width="42" height="9" rx="4.5"/>
+              </g>
+              <path fill="none" stroke="#a1a398" stroke-opacity="0.3" d="M3 215 L15 231 V530 L3 545 M476 341 L460 365 V485 L476 505"/>
+            </svg>
             <div class="card-topline">
               <span class="card-wordmark">iHere<span>.no</span><sup>®</sup></span>
               <span class="device-label">V2 / 128×64</span>

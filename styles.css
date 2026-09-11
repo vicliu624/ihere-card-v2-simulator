@@ -66,8 +66,8 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 0.98
 
 .card-stage { position: relative; display: grid; min-height: 830px; place-items: center; overflow: visible; }
 .card-shadow { position: absolute; width: min(82%, 480px); height: 74%; border-radius: 50%; background: rgba(0, 0, 0, 0.42); filter: blur(44px); transform: translateY(42px); }
-.ihere-card { position: relative; width: min(100%, 479px); height: 760px; min-height: 0; padding: 0; border: 1px solid rgba(230, 251, 255, 0.3); border-radius: 32px; background: linear-gradient(140deg, #d3e2e4 0%, #95afb5 38%, #54717b 100%); box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.7), inset -12px -16px 28px rgba(16, 32, 42, 0.36), 0 35px 75px rgba(0, 0, 0, 0.44); }
-.ihere-card::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(18, 44, 54, 0.36); border-radius: 34px; pointer-events: none; }
+.ihere-card { position: relative; width: min(100%, 479px); height: 760px; min-height: 0; padding: 0; border: 1px solid transparent; background: transparent; }
+.concept-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 5px 0 #22251f) drop-shadow(0 18px 20px #0008); }
 .card-topline, .led-rail, .screen-bezel, .hardware-controls, .device-footnote { position: relative; }
 .card-topline { position: absolute; top: 3%; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; min-height: 28px; color: #0e3040; }
 .card-wordmark { font-size: 1.4rem; font-style: italic; font-weight: 900; letter-spacing: -0.09em; }
@@ -102,6 +102,15 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 0.98
 .key-back { display: flex; align-items: center; justify-content: center; min-height: 52px !important; padding: 0; color: #102f3b; border-color: #567780; background: linear-gradient(145deg, #b7cbd0, #718b94); box-shadow: inset 0 2px 1px rgba(244, 255, 255, 0.6), inset 0 -4px 7px rgba(12, 45, 54, 0.28), 0 3px 0 #3d5d66, 0 5px 6px rgba(0, 0, 0, 0.2); }.key-back span { margin: 0; }
 .key-mute { position: static; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; padding: 0; border-radius: 8px; }.key-mute span { margin: 0; }
 .device-footnote { display: none; }
+.ihere-card .card-topline, .ihere-card .card-wordmark span { color: #b8bbb4; }
+.ihere-card .device-label { color: #90968b; border-color: #565b50; background: #191c17; }
+.ihere-card .led-rail { color: #b2b9aa; }
+.ihere-card .screen-bezel { border-color: #353932; background: #070a07; box-shadow: inset 0 0 0 2px #707667, inset 0 0 12px #000; }
+.ihere-card .screen-spec { color: #9aab8f; }
+.ihere-card .device-key { border-color: #6a6e64; color: #ffe5c5; background: linear-gradient(110deg, #a64b14, #7b2c05); box-shadow: inset 0 0 0 3px #663012, inset 0 2px 2px #df8544, 0 3px 0 #2c2e28, 0 5px 5px #0009; }
+.ihere-card .key-back { color: #e0e5d9; background: linear-gradient(120deg, #555c4f, #30362c); box-shadow: inset 0 0 0 3px #343b2e, inset 0 2px 2px #7e8774, 0 3px 0 #1c2118, 0 5px 5px #0009; }
+.ihere-card .key-mute { color: #ffe1d2; background: linear-gradient(120deg, #a33d22, #6e2217); box-shadow: inset 0 0 0 3px #672519, inset 0 2px 2px #cf7251, 0 3px 0 #381d15, 0 5px 5px #0009; }
+.ihere-card .device-key:active, .ihere-card .device-key.is-pressed { box-shadow: inset 0 2px 5px #0009, 0 1px 0 #292c25; }
 .layout-callouts .callout::after { top: var(--leader-y, 50%); }
 .layout-callouts .callout::before { top: calc(var(--leader-y, 50%) - 4px); }
 
