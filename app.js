@@ -323,12 +323,7 @@
 
   dom.keys.forEach((button) => button.addEventListener("click", () => press(button.dataset.key)));
   const wheel = document.getElementById("side-wheel");
-  const frontControls = document.querySelector(".control-rail");
-  function alignFrontControls() {
-    const screenRect = canvas.getBoundingClientRect();
-    const controlsRect = frontControls.offsetParent.getBoundingClientRect();
-    frontControls.style.top = `${screenRect.top + screenRect.height / 2 - controlsRect.top}px`;
-    frontControls.style.transform = "translateY(-50%)";
+  function alignCallouts() {
     const stageRect = document.querySelector(".card-stage").getBoundingClientRect();
     const menuRect = document.querySelector(".key-menu").getBoundingClientRect();
     const backRect = document.querySelector(".key-back").getBoundingClientRect();
@@ -348,9 +343,9 @@
       nextTop = top + height + 16;
     });
   }
-  new ResizeObserver(alignFrontControls).observe(canvas);
-  window.addEventListener("resize", alignFrontControls);
-  alignFrontControls();
+  new ResizeObserver(alignCallouts).observe(document.querySelector('.ihere-card'));
+  window.addEventListener("resize", alignCallouts);
+  alignCallouts();
   let wheelOffset = 0;
   let wheelDelta = 0;
   let lastWheelTime = 0;
