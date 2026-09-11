@@ -323,6 +323,23 @@
 
   dom.keys.forEach((button) => button.addEventListener("click", () => press(button.dataset.key)));
   const wheel = document.getElementById("side-wheel");
+  const frontControls = document.querySelector(".control-rail");
+  function alignFrontControls() {
+    const screenRect = canvas.getBoundingClientRect();
+    const controlsRect = frontControls.offsetParent.getBoundingClientRect();
+    frontControls.style.top = `${screenRect.top + screenRect.height / 2 - controlsRect.top}px`;
+    frontControls.style.transform = "translateY(-50%)";
+    const stageRect = document.querySelector(".card-stage").getBoundingClientRect();
+    const menuRect = document.querySelector(".key-menu").getBoundingClientRect();
+    const backRect = document.querySelector(".key-back").getBoundingClientRect();
+    const muteRect = document.querySelector(".key-mute").getBoundingClientRect();
+    const wide = window.matchMedia("(min-width: 1251px)").matches;
+    document.querySelector(".callout-menu").style.top = wide ? `${(menuRect.top + backRect.bottom) / 2 - stageRect.top}px` : "auto";
+    document.querySelector(".callout-mute").style.top = wide ? `${muteRect.top + muteRect.height / 2 - stageRect.top}px` : "auto";
+  }
+  new ResizeObserver(alignFrontControls).observe(canvas);
+  window.addEventListener("resize", alignFrontControls);
+  alignFrontControls();
   let wheelOffset = 0;
   let wheelDelta = 0;
   let lastWheelTime = 0;
