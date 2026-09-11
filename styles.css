@@ -10,7 +10,7 @@
 /* The front face and the edge wheel share the card's coordinate system. */
 .side-wheel { position: absolute; z-index: 2; top: 21%; right: -17px; width: 44px; height: 114px; padding: 10px 4px 10px 15px; border: 0; border-radius: 15px; background: transparent; touch-action: none; user-select: none; -webkit-user-select: none; cursor: ns-resize; }
 .side-wheel::before { content: ""; position: absolute; width: 98px; height: 98px; right: 5px; top: 8px; border-radius: 50%; background: #102630; clip-path: inset(0 0 0 72px); }
-.side-wheel { overflow: hidden; }
+.side-wheel { overflow: visible; }
 .side-wheel .wheel-drum { clip-path: inset(0 0 0 66px); }
 @media (max-width: 700px) {
   .side-wheel .wheel-drum { width: 70px; height: 70px; top: 5px; clip-path: inset(0 0 0 46px); }
@@ -68,6 +68,8 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 0.98
 .card-shadow { position: absolute; width: min(82%, 480px); height: 74%; border-radius: 50%; background: rgba(0, 0, 0, 0.42); filter: blur(44px); transform: translateY(42px); }
 .ihere-card { position: relative; width: min(100%, 479px); height: 760px; min-height: 0; padding: 0; border: 1px solid transparent; background: transparent; }
 .concept-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 5px 0 #22251f) drop-shadow(0 18px 20px #0008); }
+.ihere-card { z-index: 1; isolation: isolate; overflow: visible; }
+.hardware-controls .side-wheel { z-index: 5; }
 .card-topline, .led-rail, .screen-bezel, .hardware-controls, .device-footnote { position: relative; }
 .card-topline { position: absolute; top: 3%; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; min-height: 28px; color: #0e3040; }
 .card-wordmark { font-size: 1.4rem; font-style: italic; font-weight: 900; letter-spacing: -0.09em; }
@@ -114,6 +116,8 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 0.98
 .ihere-card .device-key:active, .ihere-card .device-key.is-pressed { box-shadow: inset 0 2px 5px #0009, 0 1px 0 #292c25; }
 .layout-callouts .callout::after { top: var(--leader-y, 50%); }
 .layout-callouts .callout::before { top: calc(var(--leader-y, 50%) - 4px); }
+.layout-callouts .callout::after { left: -14px; width: 10px; }
+.layout-callouts .callout::before { left: -20px; }
 
 .simulator-layout > *, .card-stage > *, .state-panel dd { min-width: 0; }
 .scenario-select { min-width: 0; max-width: 100%; }
