@@ -334,8 +334,19 @@
     const backRect = document.querySelector(".key-back").getBoundingClientRect();
     const muteRect = document.querySelector(".key-mute").getBoundingClientRect();
     const wide = window.matchMedia("(min-width: 1251px)").matches;
-    document.querySelector(".callout-menu").style.top = wide ? `${(menuRect.top + backRect.bottom) / 2 - stageRect.top}px` : "auto";
-    document.querySelector(".callout-mute").style.top = wide ? `${muteRect.top + muteRect.height / 2 - stageRect.top}px` : "auto";
+    const wheelRect = wheel.getBoundingClientRect();
+    let nextTop = 0;
+    [[".callout-navigate", wheelRect.top + wheelRect.height / 2],
+      [".callout-menu", (menuRect.top + backRect.bottom) / 2],
+      [".callout-mute", muteRect.top + muteRect.height / 2]].forEach(([selector, target]) => {
+      const callout = document.querySelector(selector);
+      const height = callout.getBoundingClientRect().height;
+      const top = Math.max(nextTop, target - stageRect.top - height / 2);
+      callout.style.top = wide ? `${top}px` : "auto";
+      callout.style.transform = "none";
+      callout.style.setProperty("--leader-y", `${target - stageRect.top - top}px`);
+      nextTop = top + height + 16;
+    });
   }
   new ResizeObserver(alignFrontControls).observe(canvas);
   window.addEventListener("resize", alignFrontControls);
