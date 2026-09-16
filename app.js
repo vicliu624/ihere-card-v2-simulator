@@ -78,7 +78,7 @@
       myBrowse: [state.collectionIndex, 7, 12, 107, 35],
       findBrowse: [state.collectionIndex, 7, 12, 107, 35],
       // Fully visible menus keep their text stationary; only focus changes.
-      info: [state.infoIndex, 17, 12, 94, 30],
+      info: [state.infoIndex, 17, 24, 94, 18],
       settings: [Number(state.silent), 23, 30, 82, 13]
     };
     const spec = specs[state.page];
@@ -203,7 +203,7 @@
   function renderConfirm() { header(state.confirm.title); rect(12, 18, 104, 23); const scale = textWidth(state.confirm.value, 2) <= 90 ? 2 : 1; center(25, state.confirm.value, scale); footer("BACK OR OK"); }
   function renderNotice() { header(state.notice.title); rect(12, 17, 104, 29); center(23, state.notice.primary); center(35, state.notice.secondary); footer(state.notice.help || "BACK"); }
   function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); center(33, state.silent ? "ON" : "OFF"); center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ BACK OK"); }
-  function renderInfo() { const values = [["BATTERY", "86%"], ["VERSION", "0.1.0"], ["CARD ID", "A7K9P2Q4"]]; const [name, value] = values[state.infoIndex]; header("INFO"); center(14, name); rect(16, 23, 96, 20); center(26, value, textWidth(value, 2) <= 82 ? 2 : 1); progress(3, state.infoIndex + 1, 47); footer("▲ ▼ BACK"); }
+  function renderInfo() { const values = [["BATTERY", "86%"], ["VERSION", "0.1.0"], ["CARD ID", "A7K9P2Q4"]]; const [name, value] = values[state.infoIndex]; header(`INFO - ${name}`); rect(16, 23, 96, 20); const scale = textWidth(value, 2) <= 82 ? 2 : 1; center(scale === 2 ? 26 : 29, value, scale); progress(3, state.infoIndex + 1); footer("▲ ▼ BACK"); }
   function renderMatch() { header(state.page === "muted" ? "MUTED" : "MATCH"); center(14, state.page === "muted" ? "MATCH PAUSED" : "MATCHED TAG"); if (state.page !== "match" || state.blink) center(22, state.match?.tag || "INVESTOR", 2); if (state.page === "muted") center(45, "RETURNING HOME"); else { fill(39, 41, 50, 10); text(52, 43, "MUTE", 1, false); footer("MUTE"); } }
   function renderLifecycle() { const copy = { "boot-logo": ["", "IHERE.NO"], "boot-starting": ["IHERE", "STARTING 1/2"], "boot-loading": ["IHERE", "LOADING 2/2"], "provision-pre": ["IHERE", "NO KEY|PROVISION"], provisioning: ["IHERE", "PROVISIONING|PLEASE WAIT"], "provision-ready": ["IHERE", "READY|AUTH OK"], "provision-failed": ["IHERE", "NO KEY|TRY AGAIN"], "provision-limited": ["IHERE", "LIMITED|PROVISION"], "provision-revoked": ["IHERE", "REVOKD|LOCKED"], rma: ["IHERE", "RMA|SERVICE"] }[state.lifecycle];
     if (state.lifecycle === "boot-logo") { italicCenter(25, "IHERE.NO", 2); return; }
