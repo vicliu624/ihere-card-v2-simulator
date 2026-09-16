@@ -39,6 +39,7 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: .98;
 .card-shadow { position: absolute; width: min(82%, 480px); height: 74%; border-radius: 50%; background: #0006; filter: blur(44px); transform: translateY(42px); }
 .ihere-card { position: relative; z-index: 1; isolation: isolate; container-type: inline-size; width: min(100%, 479px); height: auto; aspect-ratio: 52 / 82; padding: 0; border: 0; background: transparent; overflow: visible; }
 .concept-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 5px 0 #22251f) drop-shadow(0 18px 20px #0008); }
+.panel-etching { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .card-topline { position: absolute; inset: 0; color: #b8bbb4; pointer-events: none; }
 .card-wordmark { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 7cqw; font-style: italic; font-weight: 900; letter-spacing: -0.09em; }
 .card-wordmark span { color: #b8bbb4; }

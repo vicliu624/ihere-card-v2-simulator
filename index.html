@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=wider-armor-v32" />
+    <link rel="stylesheet" href="styles.css?v=etched-panel-v33" />
   </head>
   <body>
     <main class="page-shell">
@@ -136,6 +136,20 @@
                 <rect x="373" y="736" width="42" height="9" rx="4.5"/>
               </g>
               <path fill="none" stroke="#a1a398" stroke-opacity="0.3" d="M3 215 L15 231 V530 L3 545 M476 341 L460 365 V485 L476 505"/>
+            </svg>
+            <svg class="panel-etching" viewBox="0 0 52 82" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <pattern id="diagonal-etch" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+                  <path d="M.4 0 V3" stroke="#52604a" stroke-opacity=".3" stroke-width=".16"/>
+                  <path d="M.65 0 V3" stroke="#020502" stroke-width=".24"/>
+                </pattern>
+                <linearGradient id="etch-fade" x1="0" y1="0" x2="1" y2=".3"><stop stop-color="white" stop-opacity=".8"/><stop offset=".65" stop-color="white" stop-opacity=".45"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+                <mask id="etch-mask"><path d="M7 40 H44 L46 42 V58 L40 64 H7 Z" fill="url(#etch-fade)"/></mask>
+              </defs>
+              <path d="M7 40 H44 L46 42 V58 L40 64 H7 Z" fill="url(#diagonal-etch)" mask="url(#etch-mask)"/>
+              <path d="M7 43 V40 H13 M39 64 H42 L46 60" fill="none" stroke="#5c6652" stroke-opacity=".42" stroke-width=".2"/>
+              <path d="M7.5 61 L9.5 58 M9.2 61 L11.2 58 M10.9 61 L12.9 58" stroke="#b5753e" stroke-opacity=".65" stroke-width=".45"/>
+              <path d="M15 60.2 H23" stroke="#58614e" stroke-opacity=".45" stroke-width=".15"/>
             </svg>
             <div class="card-topline">
               <span class="card-wordmark">iHere<span>.no</span><sup>®</sup></span>
