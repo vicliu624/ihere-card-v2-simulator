@@ -39,18 +39,19 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: .98;
 .card-shadow { position: absolute; width: min(82%, 480px); height: 74%; border-radius: 50%; background: #0006; filter: blur(44px); transform: translateY(42px); }
 .ihere-card { position: relative; z-index: 1; isolation: isolate; container-type: inline-size; width: min(100%, 479px); height: auto; aspect-ratio: 52 / 82; padding: 0; border: 0; background: transparent; overflow: visible; }
 .concept-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 5px 0 #22251f) drop-shadow(0 18px 20px #0008); }
-.card-topline { position: absolute; top: 3%; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; color: #b8bbb4; }
-.card-wordmark { font-size: 4.4cqw; font-style: italic; font-weight: 900; letter-spacing: -0.09em; }
+.card-topline { position: absolute; inset: 0; color: #b8bbb4; pointer-events: none; }
+.card-wordmark { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 7cqw; font-style: italic; font-weight: 900; letter-spacing: -0.09em; }
 .card-wordmark span { color: #b8bbb4; }
 .card-wordmark sup { margin-left: 2px; font-size: 2cqw; }
-.device-label { padding: .8cqw 1.1cqw; border: 1px solid #565b50; border-radius: 1.4cqw; color: #90968b; background: #191c17; font-family: Consolas, monospace; font-size: 1.7cqw; font-weight: 800; letter-spacing: .05em; }
+.device-label { position: absolute; top: 3%; right: 5%; padding: .8cqw 1.1cqw; border: 1px solid #565b50; border-radius: 1.4cqw; color: #90968b; background: #191c17; font-family: Consolas, monospace; font-size: 1.7cqw; font-weight: 800; letter-spacing: .05em; }
 .led-rail, .hardware-controls { position: absolute; inset: 0; pointer-events: none; }
 .led { position: absolute; border: .28cqw solid #345a67; border-radius: 50%; background: #132c34; box-shadow: inset 0 0 1cqw #000c; transition: background 100ms ease, box-shadow 100ms ease; }
 .led-label { position: absolute; left: 37.5%; top: 7.9268292683%; transform: translate(-50%, -50%); font-family: Consolas, monospace; font-size: clamp(6px, 1.8cqw, 9px); font-weight: 800; letter-spacing: .06em; color: #b2b9aa; }
 .led.is-active { background: #75f7ff; box-shadow: 0 0 2cqw #75f7ff, 0 0 4cqw #1fb7e4, inset 0 0 1cqw #fff; }
 .led.is-active.is-blink-off { background: #1a4e58; box-shadow: inset 0 0 1cqw #000c; }
 /* The canvas bounds are the active area, with no module/panel frame added. */
-.screen-bezel { position: absolute; padding: 0; border: 0; border-radius: 0; background: #02100a; box-shadow: 0 0 0 .25cqw #353932, 0 0 3cqw #000; }
+.front-armor { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 .5cqw .25cqw #000a); }
+.screen-bezel { position: absolute; padding: 0; border: 0; border-radius: 0; background: #02100a; box-shadow: 0 0 0 .15cqw #10170b; }
 #device-screen { display: block; width: 100%; height: 100%; margin: 0; border: 0; background: #02100a; image-rendering: pixelated; image-rendering: crisp-edges; }
 .control-rail, .back-cluster, .decision-pair { display: contents; }
 .device-key { position: absolute; display: flex; align-items: center; justify-content: center; min-height: 0; padding: 0; pointer-events: auto; border: .2cqw solid #6a6e64; border-radius: 1.9230769231cqw; color: #ffe5c5; background: linear-gradient(110deg, #a64b14, #7b2c05); box-shadow: inset 0 0 0 .55cqw #663012, inset 0 .4cqw .4cqw #df8544, 0 .55cqw 0 #2c2e28, 0 1cqw 1cqw #0009; transition: transform 70ms ease, box-shadow 70ms ease, filter 100ms ease; }

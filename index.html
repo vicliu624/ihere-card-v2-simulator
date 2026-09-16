@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=rotor-armor-v18" />
+    <link rel="stylesheet" href="styles.css?v=unified-panel-v19" />
   </head>
   <body>
     <main class="page-shell">
@@ -148,6 +148,22 @@
               <span class="led" id="led-right" aria-label="Right Match LED"></span>
             </div>
 
+            <svg class="front-armor" viewBox="0 0 52 82" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="front-bevel" x2=".8" y2="1"><stop stop-color="#979c8e"/><stop offset=".45" stop-color="#555e4d"/><stop offset="1" stop-color="#242b20"/></linearGradient>
+                <linearGradient id="front-face" x2=".5" y2="1"><stop stop-color="#50564b"/><stop offset="1" stop-color="#2e342b"/></linearGradient>
+              </defs>
+              <!-- Shared stepped frame, bridge to rotor cover, and lower key deck. -->
+              <path d="M5 8.5 H34.5 L37 10.5 H40 V23.5 L37 26.5 H44 L47 29 V34.5 L44.5 37 H25 L22.5 34.5 V27.5 H5 L2.5 25 V11 Z" fill="url(#front-bevel)" stroke="#7c8572" stroke-width=".18"/>
+              <path d="M5.4 9.3 H34 L36.5 11.3 H39 V22.9 L35.8 27.4 H43.5 L46 29.4 V34.1 L44.1 36.1 H25.4 L23.4 34.1 V26.6 H5.4 L3.4 24.6 V11.4 Z" fill="url(#front-face)" stroke="#222a1b" stroke-width=".22"/>
+              <rect x="4.35" y="10.2" width="30.3" height="15.6" rx=".45" fill="#060b04" stroke="#a0aa92" stroke-width=".15"/>
+              <path d="M24.2 28.2 H43.2 L44.8 29.8 V33.7 L43.4 35 H26 L24.2 33.3 Z" fill="#20271b" stroke="#69735b" stroke-width=".16"/>
+              <path d="M34.5 28.6 V34.6 M35.7 12 V23" stroke="#10170c" stroke-width=".3"/>
+              <path d="M5.5 9.1 H10 M17 26.8 H21 M43.4 27.8 L45.5 29.9" stroke="#c07636" stroke-width=".3" fill="none"/>
+              <path d="M40 42.5 H48 L49.4 44 V50 L48 51.5 H40 L38.6 50 V44 Z" fill="url(#front-bevel)" stroke="#7c8572" stroke-width=".16"/>
+              <path d="M40.3 43.3 H47.7 L48.6 44.3 V49.7 L47.7 50.7 H40.3 L39.4 49.7 V44.3 Z" fill="url(#front-face)"/>
+              <path d="M41 51 H47" stroke="#ad5135" stroke-width=".3"/>
+            </svg>
             <div class="screen-bezel">
               <canvas id="device-screen" width="128" height="64" aria-label="128 by 64 monochrome iHere Card screen"></canvas>
             </div>
@@ -201,7 +217,7 @@
             <article class="callout callout-menu">
               <p class="eyebrow">TASK CONTROL</p>
               <h3>MENU · BACK</h3>
-              <p>Enter a task level or return from it. Same size; BACK uses a darker color.</p>
+              <p>MENU and BACK share a horizontal deck below the display. Its stepped frame connects visually to the screen surround and rotor armor; the darker BACK key marks the return action.</p>
             </article>
             <article class="callout callout-mute">
               <p class="eyebrow">ALERT INTERRUPT</p>
@@ -213,7 +229,7 @@
       </section>
     </main>
 
-    <script src="hardware-layout.js?v=cad-rev08"></script>
+    <script src="hardware-layout.js?v=unified-panel-v19"></script>
     <script src="tag-vocabulary.js?v=canonical-1019"></script>
     <script src="app.js?v=live-autofill-v1"></script>
   </body>
