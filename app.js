@@ -141,15 +141,15 @@
   function clear() { fill(0, 0, WIDTH, HEIGHT, false); }
   function header(title) { fill(0, 0, WIDTH, 10); text(5, 1, title, 1, false); }
   function footer(help) { fill(0, 53, WIDTH, 1); if (help) center(56, help); }
-  function progress(count, active, y = 49) {
+  function progress(count, active) {
     if (!count) return;
-    const gap = count > 1 ? 2 : 0;
-    const available = 112 - ((count - 1) * gap);
+    const gap = count > 1 ? 1 : 0;
+    const available = 40 - ((count - 1) * gap);
     const base = Math.floor(available / count);
     const extra = available % count;
-    let x = 8;
-    // A 2px outline has no hollow centre, so inactive segments looked active.
-    for (let i = 1; i <= count; i += 1) { const width = base + (i <= extra ? 1 : 0); if (i === active) fill(x, y, width, 3); else rect(x, y, width, 3); x += width + gap; }
+    let y = 12;
+    // Reserve the rightmost four pixels; even ten items retain hollow segments.
+    for (let i = 1; i <= count; i += 1) { const height = base + (i <= extra ? 1 : 0); if (i === active) fill(123, y, 4, height); else rect(123, y, 4, height); y += height + gap; }
   }
   function heatBars(level) {
     const map = { HIGH: [4,6,5,4,6,5,4,6,4,5,4,6], MED: [3,4,2,4,3,3,4,2], LOW: [2,3,2,3,2] };
@@ -167,19 +167,20 @@
     const tags = state.myTags;
     const tag = tags[state.homeIndex] || "NO TAG";
     const heat = state.homeMode === "no-tag" ? "ADD TAG" : state.homeMode === "limited" ? "LIMITED" : state.homeMode === "none" ? "NONE" : state.silent || state.homeMode === "silent" ? "SILENT" : ["HIGH", "MED", "LOW"][state.homeIndex % 3];
-    fill(0, 0, WIDTH, 10); text(5, 1, "IHERE", 1, false); center(1, tags.length ? `${state.homeIndex + 1}/${tags.length}` : "0/0", 1, false); text(108, 1, "MY", 1, false);
-    if (tags.length) progress(tags.length, state.homeIndex + 1, 11);
+    fill(0, 0, WIDTH, 10); text(5, 1, "IHERE", 1, false); text(108, 1, "MY", 1, false);
+    if (tags.length) progress(tags.length, state.homeIndex + 1);
     rect(7, 15, 114, 23); center(20, tag, textWidth(tag, 2) <= 104 ? 2 : 1); center(40, heat);
     if (["HIGH", "MED", "LOW"].includes(heat)) heatBars(heat);
     footer(tags.length ? "MENU ▲ ▼ OK" : "MENU OK");
   }
 
   function renderCarousel(title, value, detail, index, count, help = "MENU ▲ ▼ BACK OK") {
-    header(title); const scale = textWidth(value, 2) <= 94 ? 2 : 1; const showArrows = textWidth(value, scale) <= 94; if (showArrows) { text(116, 16, "▲"); text(116, 38, "▼"); } center(20, value, scale); center(37, wrapped(detail, 20)); progress(count, index); footer(help);
+    header(title); const scale = textWidth(value, 2) <= 108 ? 2 : 1; center(20, wrapped(value, 20), scale); center(37, wrapped(detail, 20)); progress(count, index); footer(help);
   }
 
   function renderList(title, items, focus, help = "▲ ▼ MOVE BACK OK") {
     header(title);
+    progress(items.length, focus + 1);
     items.forEach((item, index) => {
       const y = 12 + index * 9;
       if (index === focus) { fill(7, y - 1, 114, 8); text(12, y, item, 1, false); }
@@ -191,7 +192,7 @@
   function renderCollection() {
     const tags = currentTags(); const title = state.collection === "my" ? "MY TAGS" : "FIND TAG";
     if (!tags.length) { renderCarousel(title, "NO TAG", "OK TO ADD", 0, 0, "MENU OK"); return; }
-    renderCarousel(title, tags[state.collectionIndex], `${state.collectionIndex + 1} OF ${tags.length}`, state.collectionIndex + 1, tags.length, "MENU ▲ ▼ OK");
+    renderCarousel(title, tags[state.collectionIndex], "", state.collectionIndex + 1, tags.length, "MENU ▲ ▼ OK");
   }
 
   function renderAction() { const title = state.collection === "my" ? "MY TAGS" : "FIND TAG"; renderList(title, actionItems, state.actionIndex); }
