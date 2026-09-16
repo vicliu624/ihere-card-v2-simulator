@@ -45,6 +45,8 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: .98;
 .card-wordmark sup { margin-left: 2px; font-size: 2cqw; }
 .device-label { position: absolute; top: 3%; right: 5%; padding: .8cqw 1.1cqw; border: 1px solid #565b50; border-radius: 1.4cqw; color: #90968b; background: #191c17; font-family: Consolas, monospace; font-size: 1.7cqw; font-weight: 800; letter-spacing: .05em; }
 .led-rail, .hardware-controls { position: absolute; inset: 0; pointer-events: none; }
+.led-rail { z-index: 2; }
+.card-topline { z-index: 2; }
 .led { position: absolute; border: .28cqw solid #345a67; border-radius: 50%; background: #132c34; box-shadow: inset 0 0 1cqw #000c; transition: background 100ms ease, box-shadow 100ms ease; }
 .led-label { position: absolute; left: 37.5%; top: 7.9268292683%; transform: translate(-50%, -50%); font-family: Consolas, monospace; font-size: clamp(6px, 1.8cqw, 9px); font-weight: 800; letter-spacing: .06em; color: #b2b9aa; }
 .led.is-active { background: #75f7ff; box-shadow: 0 0 2cqw #75f7ff, 0 0 4cqw #1fb7e4, inset 0 0 1cqw #fff; }
