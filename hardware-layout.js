@@ -6,8 +6,7 @@
   const board = Object.freeze({ width: 52, height: 82 });
   const parts = Object.freeze([
     { selector: '.screen-bezel', x: 23, y: 6.5, width: 29.42, height: 14.7 },
-    { selector: '.key-menu', x: 9.5, y: 12, width: 8, height: 6 },
-    { selector: '.key-back', x: 9.5, y: 1, width: 8, height: 6 },
+    { selector: '.key-menu', x: 9.5, y: 6.5, width: 8, height: 6 },
     { selector: '.key-mute', x: 11, y: -18.5, width: 6.5, height: 4.5 },
     { selector: '#side-wheel', x: 27, y: -21, width: 17, height: 17 },
     { selector: '#led-left', x: 34.5, y: 11.5, width: 2, height: 2 },
@@ -30,6 +29,6 @@
     }
   }
 
-  window.IHereHardwareLayout = Object.freeze({ revision: 'REV 08 + front-panel horizontal MENU/BACK', board, parts, apply });
+  window.IHereHardwareLayout = Object.freeze({ revision: 'REV 08 + MENU/MUTE with wheel confirmations', board, parts, apply });
   apply(document.querySelector('.ihere-card'));
 })();

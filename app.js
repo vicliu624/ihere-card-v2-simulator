@@ -20,8 +20,8 @@
   };
 
   const menuItems = ["MY TAGS", "FIND TAG", "SETTINGS", "INFO"];
-  const actionItems = ["ADD", "EDIT", "DELETE", "BACK"];
-  const editorItems = ["DONE", "CLEAR", "LEAVE EDIT"];
+  const actionItems = ["ADD", "EDIT", "DELETE"];
+  const editorItems = ["DONE", "DELETE CHAR", "CLEAR", "LEAVE EDIT"];
   const vocabulary = Array.isArray(window.IHERE_VOCABULARY) ? window.IHERE_VOCABULARY : [];
   // Default sort compares ASCII/code-unit order, not locale collation.
   const completionWords = vocabulary.filter(word => typeof word === "string" && word.length > 0 && word.length <= 20).slice().sort();
@@ -172,11 +172,11 @@
     footer(tags.length ? "MENU ▲ ▼ OK" : "MENU OK");
   }
 
-  function renderCarousel(title, value, detail, index, count, help = "MENU ▲ ▼ BACK OK") {
+  function renderCarousel(title, value, detail, index, count, help = "MENU ▲ ▼ OK") {
     header(title); const scale = textWidth(value, 2) <= 108 ? 2 : 1; center(20, wrapped(value, 20), scale); center(37, wrapped(detail, 20)); progress(count, index); footer(help);
   }
 
-  function renderList(title, items, focus, help = "▲ ▼ MOVE BACK OK") {
+  function renderList(title, items, focus, help = "▲ ▼ MENU OK") {
     header(title);
     progress(items.length, focus + 1);
     items.forEach((item, index) => {
@@ -198,12 +198,12 @@
   function drawSlots() {
     state.slots.forEach((char, index) => { const row = Math.floor(index / 10); const column = index % 10; const x = 9 + column * 11; const y = 22 + row * 12; if (index === state.cursor) { fill(x, y, 10, 9); if (char) text(x + 3, y + 1, char, 1, false); } else { rect(x, y, 10, 9); if (char) text(x + 3, y + 1, char); } });
   }
-  function renderDraft() { header(state.draftMode === "add" ? "ADD TAG" : "EDIT TAG"); text(8, 13, "DRAFT:"); text(45, 13, wrapped(draftText() || "_", 13)); drawSlots(); center(45, `CURSOR ${state.cursor + 1}/20`); footer("MENU ▲ ▼ BACK OK"); }
+  function renderDraft() { header(state.draftMode === "add" ? "ADD TAG" : "EDIT TAG"); text(8, 13, "DRAFT:"); text(45, 13, wrapped(draftText() || "_", 13)); drawSlots(); center(45, `CURSOR ${state.cursor + 1}/20`); footer("MENU ▲ ▼ OK"); }
   function renderEditorMenu() { renderList("EDIT MENU", editorItems, state.editorIndex); }
-  function renderConfirm() { header(state.confirm.title); rect(12, 18, 104, 23); const scale = textWidth(state.confirm.value, 2) <= 90 ? 2 : 1; center(25, state.confirm.value, scale); footer("BACK OR OK"); }
-  function renderNotice() { header(state.notice.title); rect(12, 17, 104, 29); center(23, state.notice.primary); center(35, state.notice.secondary); footer(state.notice.help || "BACK"); }
-  function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); center(33, state.silent ? "ON" : "OFF"); center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ BACK OK"); }
-  function renderInfo() { const values = [["BATTERY", "86%"], ["VERSION", "0.1.0"], ["CARD ID", "A7K9P2Q4"]]; const [name, value] = values[state.infoIndex]; header(`INFO - ${name}`); rect(16, 23, 96, 20); const scale = textWidth(value, 2) <= 82 ? 2 : 1; center(scale === 2 ? 26 : 29, value, scale); progress(3, state.infoIndex + 1); footer("▲ ▼ BACK"); }
+  function renderConfirm() { header(state.confirm.title); center(15, wrapped(state.confirm.value, 20)); ['NO', 'YES'].forEach((label, index) => { const y = 29 + index * 11; const selected = Number(Boolean(state.confirm.yes)) === index; if (selected) fill(7, y - 1, 114, 9); text(52, y, label, 1, !selected); }); footer("▲ ▼ SELECT OK"); }
+  function renderNotice() { header(state.notice.title); rect(12, 17, 104, 29); center(23, state.notice.primary); center(35, state.notice.secondary); footer(state.notice.help || "MENU OR OK"); }
+  function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); center(33, state.silent ? "ON" : "OFF"); center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ MENU OK"); }
+  function renderInfo() { const values = [["BATTERY", "86%"], ["VERSION", "0.1.0"], ["CARD ID", "A7K9P2Q4"]]; const [name, value] = values[state.infoIndex]; header(`INFO - ${name}`); rect(16, 23, 96, 20); const scale = textWidth(value, 2) <= 82 ? 2 : 1; center(scale === 2 ? 26 : 29, value, scale); progress(3, state.infoIndex + 1); footer("▲ ▼ MENU"); }
   function renderMatch() { header(state.page === "muted" ? "MUTED" : "MATCH"); center(14, state.page === "muted" ? "MATCH PAUSED" : "MATCHED TAG"); if (state.page !== "match" || state.blink) center(22, state.match?.tag || "INVESTOR", 2); if (state.page === "muted") center(45, "RETURNING HOME"); else { fill(39, 41, 50, 10); text(52, 43, "MUTE", 1, false); footer("MUTE"); } }
   function renderLifecycle() { const copy = { "boot-logo": ["", "IHERE.NO"], "boot-starting": ["IHERE", "STARTING 1/2"], "boot-loading": ["IHERE", "LOADING 2/2"], "provision-pre": ["IHERE", "NO KEY|PROVISION"], provisioning: ["IHERE", "PROVISIONING|PLEASE WAIT"], "provision-ready": ["IHERE", "READY|AUTH OK"], "provision-failed": ["IHERE", "NO KEY|TRY AGAIN"], "provision-limited": ["IHERE", "LIMITED|PROVISION"], "provision-revoked": ["IHERE", "REVOKD|LOCKED"], rma: ["IHERE", "RMA|SERVICE"] }[state.lifecycle];
     if (state.lifecycle === "boot-logo") { italicCenter(25, "IHERE.NO", 2); return; }
@@ -252,10 +252,10 @@
   }
   function finishDraft() {
     const tag = draftText(); const tags = state.draftCollection === "my" ? state.myTags : state.findTags;
-    if (!tag) { showNotice("NOTICE", "EMPTY TAG", "CHANGE OR BACK", "draft"); return; }
-    if (state.draftMode === "add" && tags.includes(tag)) { showNotice("NOTICE", "TAG EXISTS", "CHANGE OR BACK", "draft"); return; }
+    if (!tag) { showNotice("NOTICE", "EMPTY TAG", "EDIT THEN DONE", "draft"); return; }
+    if (state.draftMode === "add" && tags.includes(tag)) { showNotice("NOTICE", "TAG EXISTS", "EDIT THEN DONE", "draft"); return; }
     if (state.draftMode === "add" && tags.length >= 10) { showNotice("FULL", "FULL 10/10", "DELETE A TAG", state.draftCollection === "my" ? "myBrowse" : "findBrowse"); return; }
-    if (state.draftMode === "add") { tags.push(tag); state.collectionIndex = tags.length - 1; showNotice("SAVED", tag, "RETURNING", state.draftCollection === "my" ? "myBrowse" : "findBrowse"); }
+    if (state.draftMode === "add") { state.confirm = { title: 'ADD TAG?', value: tag, action: 'add' }; state.page = 'confirm'; }
     else { state.confirm = { title: "SAVE?", value: tag, action: "save" }; state.page = "confirm"; }
   }
   function commitSave() { const tags = state.draftCollection === "my" ? state.myTags : state.findTags; tags[state.collectionIndex] = draftText(); showNotice("SAVED", draftText(), "RETURNING", state.draftCollection === "my" ? "myBrowse" : "findBrowse"); }
@@ -293,7 +293,6 @@
   }
   function applyPress(key) {
     state.pressed = key;
-    if (key === "BACK") key = "CANCEL";
     if (state.lifecycle) { render(); setTimeout(() => { state.pressed = ""; render(); }, 130); return; }
     if (state.page === "match") { if (key === "MUTE") muteMatch(); render(); setTimeout(() => { state.pressed = ""; render(); }, 130); return; }
     if (state.page === "muted" || key === "MUTE") { render(); setTimeout(() => { state.pressed = ""; render(); }, 130); return; }
@@ -303,37 +302,38 @@
       else if (key === "OK") state.myTags.length ? enterCollection("my") : startDraft("my");
     } else if (state.page === "menu") {
       if (key === "UP" || key === "DOWN") state.menuIndex = mod(state.menuIndex + (key === "DOWN" ? 1 : -1), menuItems.length);
-      else if (key === "CANCEL") state.page = "home";
+      else if (key === "MENU") state.page = "home";
       else if (key === "OK") { const item = menuItems[state.menuIndex]; if (item === "MY TAGS") enterCollection("my"); if (item === "FIND TAG") enterCollection("find"); if (item === "SETTINGS") state.page = "settings"; if (item === "INFO") state.page = "info"; }
     } else if (["myBrowse", "findBrowse"].includes(state.page)) {
       const tags = currentTags();
-      if (key === "MENU" || key === "CANCEL") state.page = "menu";
+      if (key === "MENU") state.page = "menu";
       else if (key === "OK") tags.length ? (state.actionIndex = 0, state.page = "action") : startDraft(state.collection);
       else if (tags.length && (key === "UP" || key === "DOWN")) state.collectionIndex = mod(state.collectionIndex + (key === "DOWN" ? 1 : -1), tags.length);
     } else if (state.page === "action") {
       if (key === "UP" || key === "DOWN") state.actionIndex = mod(state.actionIndex + (key === "DOWN" ? 1 : -1), actionItems.length);
-      else if (key === "CANCEL") state.page = state.collection === "my" ? "myBrowse" : "findBrowse";
+      else if (key === "MENU") state.page = state.collection === "my" ? "myBrowse" : "findBrowse";
       else if (key === "OK") { const action = actionItems[state.actionIndex]; if (action === "ADD") startDraft(state.collection); else if (action === "EDIT") startDraft(state.collection, "edit"); else if (action === "DELETE") { state.confirm = { title: "DELETE?", value: currentTags()[state.collectionIndex], action: "delete" }; state.page = "confirm"; } else state.page = "menu"; }
     } else if (state.page === "draft") {
       if (key === "UP" || key === "DOWN") state.cursor = mod(state.cursor + (key === "DOWN" ? 1 : -1), 20);
       else if (key === "OK") cycleCharacter();
-      else if (key === "CANCEL") { if (draftText()) deleteAtCursor(); else { state.confirm = { title: "LEAVE EDIT?", value: "DISCARD DRAFT", action: "leave" }; state.page = "leaveConfirm"; } }
       else if (key === "MENU") { state.editorIndex = 0; state.page = "editorMenu"; }
     } else if (state.page === "editorMenu") {
       if (key === "UP" || key === "DOWN") state.editorIndex = mod(state.editorIndex + (key === "DOWN" ? 1 : -1), editorItems.length);
-      else if (key === "CANCEL") state.page = "draft";
-      else if (key === "OK") { const action = editorItems[state.editorIndex]; if (action === "DONE") finishDraft(); else if (action === "CLEAR") { setDraft(""); state.page = "draft"; } else { state.confirm = { title: "LEAVE EDIT?", value: "DISCARD DRAFT", action: "leave" }; state.page = "leaveConfirm"; } }
+      else if (key === "MENU") state.page = "draft";
+      else if (key === "OK") { const action = editorItems[state.editorIndex]; if (action === "DONE") finishDraft(); else { state.confirm = { title: action === 'CLEAR' ? 'CLEAR DRAFT?' : action === 'DELETE CHAR' ? 'DELETE CHAR?' : 'LEAVE EDIT?', value: action === 'DELETE CHAR' ? (state.slots[state.cursor] || 'EMPTY') : 'DISCARD DRAFT', action: action === 'CLEAR' ? 'clear' : action === 'DELETE CHAR' ? 'character' : 'leave', returnPage: 'editorMenu' }; state.page = 'confirm'; } }
     } else if (state.page === "settings") {
       if (key === "UP" || key === "DOWN") state.silent = key === "DOWN";
-      else if (key === "CANCEL" || key === "MENU") state.page = "menu";
+      else if (key === "MENU") state.page = "menu";
     } else if (state.page === "info") {
       if (key === "UP" || key === "DOWN") state.infoIndex = mod(state.infoIndex + (key === "DOWN" ? 1 : -1), 3);
-      else if (key === "CANCEL" || key === "MENU") state.page = "menu";
+      else if (key === "MENU") state.page = "menu";
     } else if (["confirm", "leaveConfirm"].includes(state.page)) {
-      if (key === "CANCEL") state.page = state.confirm.action === "save" ? "draft" : state.confirm.action === "delete" ? (state.collection === "my" ? "myBrowse" : "findBrowse") : "draft";
-      else if (key === "OK") { if (state.confirm.action === "save") commitSave(); else if (state.confirm.action === "delete") { const tags = currentTags(); const deleted = tags.splice(state.collectionIndex, 1)[0]; state.collectionIndex = Math.max(0, state.collectionIndex - 1); showNotice("DELETED", deleted, "RETURNING", state.collection === "my" ? "myBrowse" : "findBrowse"); } else state.page = "home"; }
+      if (key === 'UP') state.confirm.yes = false;
+      else if (key === 'DOWN') state.confirm.yes = true;
+      else if (key === 'MENU' || (key === 'OK' && !state.confirm.yes)) state.page = state.confirm.returnPage || (state.confirm.action === 'delete' ? 'action' : 'draft');
+      else if (key === "OK") { if (state.confirm.action === "save") commitSave(); else if (state.confirm.action === 'add') { const tags = currentTags(); tags.push(draftText()); state.collectionIndex = tags.length - 1; showNotice('SAVED', draftText(), 'PRESS OK', state.collection === 'my' ? 'myBrowse' : 'findBrowse'); } else if (state.confirm.action === 'clear') { setDraft(''); state.page = 'draft'; } else if (state.confirm.action === 'character') { deleteAtCursor(); state.page = 'draft'; } else if (state.confirm.action === "delete") { const tags = currentTags(); const deleted = tags.splice(state.collectionIndex, 1)[0]; state.collectionIndex = Math.max(0, state.collectionIndex - 1); state.homeIndex = Math.min(state.homeIndex, Math.max(0, state.myTags.length - 1)); showNotice("DELETED", deleted, "PRESS OK", state.collection === "my" ? "myBrowse" : "findBrowse"); } else state.page = state.collection === 'my' ? 'myBrowse' : 'findBrowse'; }
     } else if (state.page === "notice") {
-      if (key === "CANCEL" || key === "OK") state.page = state.notice.returnPage || "home";
+      if (key === "MENU" || key === "OK") state.page = state.notice.returnPage || "home";
     }
     render(); setTimeout(() => { state.pressed = ""; render(); }, 130);
   }
@@ -373,7 +373,7 @@
     else if (scenario === "info-version") { state.page = "info"; state.infoIndex = 1; }
     else if (scenario === "info-card-id") { state.page = "info"; state.infoIndex = 2; }
     else if (scenario === "match-muted") { state.match = { tag: "INVESTOR" }; state.page = "muted"; state.blink = false; }
-    else if (scenario === "tag-exists") showNotice("NOTICE", "TAG EXISTS", "CHANGE OR BACK", "draft");
+    else if (scenario === "tag-exists") showNotice("NOTICE", "TAG EXISTS", "EDIT THEN DONE", "draft");
     else if (scenario === "tag-full") showNotice("FULL", "FULL 10/10", "DELETE A TAG", "myBrowse");
     else if (scenario === "storage-error") showNotice("ERROR", "SAVE FAIL", "TRY AGAIN", "draft");
     render();
@@ -384,13 +384,12 @@
   function alignCallouts() {
     const stageRect = document.querySelector(".card-stage").getBoundingClientRect();
     const menuRect = document.querySelector(".key-menu").getBoundingClientRect();
-    const backRect = document.querySelector(".key-back").getBoundingClientRect();
     const muteRect = document.querySelector(".key-mute").getBoundingClientRect();
     const wide = window.matchMedia("(min-width: 1251px)").matches;
     const wheelRect = wheel.getBoundingClientRect();
     let nextTop = 0;
     [[".callout-navigate", wheelRect.top + wheelRect.height / 2],
-      [".callout-menu", (menuRect.top + backRect.bottom) / 2],
+      [".callout-menu", menuRect.top + menuRect.height / 2],
       [".callout-mute", muteRect.top + muteRect.height / 2]].forEach(([selector, target]) => {
       const callout = document.querySelector(selector);
       const height = callout.getBoundingClientRect().height;
@@ -452,7 +451,7 @@
   dom.endMatch.addEventListener("click", endMatch);
   dom.reset.addEventListener("click", resetCard);
   dom.scenario.addEventListener("change", () => loadScenario(dom.scenario.value));
-  window.addEventListener("keydown", (event) => { const map = { ArrowUp: "UP", ArrowDown: "DOWN", Enter: "OK", Escape: "BACK", m: "MENU", M: "MENU", x: "MUTE", X: "MUTE" }; if (map[event.key]) { event.preventDefault(); press(map[event.key]); } });
+  window.addEventListener("keydown", (event) => { const map = { ArrowUp: "UP", ArrowDown: "DOWN", Enter: "OK", Escape: "MENU", m: "MENU", M: "MENU", x: "MUTE", X: "MUTE" }; if (map[event.key]) { event.preventDefault(); press(map[event.key]); } });
   setInterval(() => { if (state.page === "match") { state.blink = !state.blink; render(); } }, 360);
   const query = window.location && typeof window.location.search === "string" ? window.location.search : "";
   const initialScenario = query && typeof URLSearchParams !== "undefined" ? new URLSearchParams(query).get("scenario") : "";
