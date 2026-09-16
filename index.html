@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=wheel-housing-v17" />
+    <link rel="stylesheet" href="styles.css?v=rotor-armor-v18" />
   </head>
   <body>
     <main class="page-shell">
@@ -166,13 +166,23 @@
                 <button class="device-key key-mute" data-key="MUTE" type="button"><span>MUTE</span></button>
               </div>
               <div class="wheel-housing" aria-hidden="true">
-                <svg viewBox="0 0 60 180" preserveAspectRatio="none" focusable="false">
-                  <defs><linearGradient id="housing-metal" x2="1" y2="0.3"><stop stop-color="#45493f"/><stop offset="0.5" stop-color="#838879"/><stop offset="1" stop-color="#33392e"/></linearGradient></defs>
-                  <path d="M1 1 H26 L52 21 Q58 26 58 34 V43 L40 48 V132 L58 137 V146 Q58 154 52 159 L26 179 H1 Z" fill="url(#housing-metal)" stroke="#929b85" stroke-width="1.4"/>
-                  <path d="M8 9 H24 L48 29 M8 171 H24 L48 151 M8 13 V167" fill="none" stroke="#bac2a8" stroke-opacity=".5" stroke-width="1.2"/>
-                  <path d="M36 48 V132" fill="none" stroke="#151c10" stroke-width="5"/>
-                  <path d="M14 24 H27 M14 30 H33 M14 150 H33 M14 156 H27" stroke="#252d20" stroke-width="2"/>
-                  <path d="M26 16 L43 29 M26 164 L43 151" stroke="#cf7e39" stroke-width="3" stroke-linecap="round"/>
+                <svg viewBox="0 0 150 190" preserveAspectRatio="none" focusable="false">
+                  <defs>
+                    <linearGradient id="armor-bevel" x2=".8" y2="1"><stop stop-color="#9a9c94"/><stop offset=".38" stop-color="#666a60"/><stop offset="1" stop-color="#272c24"/></linearGradient>
+                    <linearGradient id="armor-face" x2=".6" y2="1"><stop stop-color="#50564b"/><stop offset="1" stop-color="#2e342b"/></linearGradient>
+                  </defs>
+                  <path d="M36 6 H112 L149 32 V159 L119 189 H35 L2 151 V49 Z" fill="#151a12"/>
+                  <path d="M36 1 H112 L147 28 V154 L117 184 H35 L1 146 V44 Z" fill="url(#armor-bevel)" stroke="#8b9181" stroke-width="1.2"/>
+                  <path d="M40 10 H108 L136 33 V150 L113 174 H39 L12 142 V49 Z" fill="url(#armor-face)" stroke="#22291d" stroke-width="2"/>
+                  <path d="M41 13 H107 L132 35 M15 51 V140 L40 169" fill="none" stroke="#b4baa8" stroke-opacity=".35"/>
+                  <path d="M54 32 H99 L117 49 V136 L98 155 H54 L30 129 V62 Z" fill="#363d30" stroke="#68705e" stroke-width="1"/>
+                  <path d="M52 39 H96 L109 53 V131 L96 145 H56 L39 125 V65 Z" fill="#292f24"/>
+                  <path d="M45 68 L64 49 H93 M45 119 L63 137 H94" fill="none" stroke="#c07636" stroke-width="3"/>
+                  <path d="M62 77 H94 M58 86 H94 M58 95 H94 M62 104 H94" stroke="#10170c" stroke-width="3"/>
+                  <path d="M63 79 H94 M59 88 H94 M59 97 H94 M63 106 H94" stroke="#69725c" stroke-opacity=".45"/>
+                  <g fill="#11170d" stroke="#8e9583" stroke-width="1.5"><circle cx="44" cy="23" r="4"/><circle cx="44" cy="160" r="4"/></g>
+                  <path d="M42 23 H46 M42 160 H46" stroke="#79836b"/>
+                  <path d="M142 40 V143" stroke="#080e05" stroke-width="5"/>
                 </svg>
               </div>
               <button id="side-wheel" class="side-wheel" type="button" aria-label="Side wheel: scroll up or down, press to confirm" aria-describedby="wheel-help">
