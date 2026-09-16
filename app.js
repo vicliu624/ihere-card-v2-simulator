@@ -65,6 +65,48 @@
 
   let state = defaultState();
   let resetSequence = 0;
+  let scrollMotion = null;
+  let scrollFrame = 0;
+  const scrollDuration = 210;
+
+  // Only the selectable viewport moves; headers, outlines and help stay fixed.
+  function selectionViewport() {
+    if (state.lifecycle) return null;
+    if (state.page === 'draft') return { key: `draft:${state.cursor}`, value: state.slots[state.cursor], x: 10 + (state.cursor % 10) * 11, y: 23 + Math.floor(state.cursor / 10) * 12, w: 8, h: 7 };
+    const specs = {
+      home: [state.homeIndex, 8, 16, 112, 21],
+      myBrowse: [state.collectionIndex, 7, 12, 107, 35],
+      findBrowse: [state.collectionIndex, 7, 12, 107, 35],
+      menu: [state.menuIndex, 7, 11, 114, 38],
+      action: [state.actionIndex, 7, 11, 114, 38],
+      editorMenu: [state.editorIndex, 7, 11, 114, 38],
+      info: [state.infoIndex, 17, 12, 94, 30],
+      settings: [Number(state.silent), 23, 30, 82, 13]
+    };
+    const spec = specs[state.page];
+    return spec ? { key: state.page, value: spec[0], x: spec[1], y: spec[2], w: spec[3], h: spec[4] } : null;
+  }
+  function snapshotViewport(v) {
+    const image = document.createElement('canvas'); image.width = v.w; image.height = v.h;
+    image.getContext('2d').drawImage(canvas, v.x, v.y, v.w, v.h, 0, 0, v.w, v.h);
+    return image;
+  }
+  function stopScroll() { cancelAnimationFrame(scrollFrame); scrollFrame = 0; scrollMotion = null; }
+  function paintScroll() {
+    if (!scrollMotion) return;
+    const m = scrollMotion;
+    if (state.page !== m.page || state.lifecycle) { stopScroll(); return; }
+    const t = Math.min(1, (performance.now() - m.start) / scrollDuration);
+    if (t >= 1) { stopScroll(); return; }
+    const offset = Math.round(m.h * (1 - Math.pow(1 - t, 2))) * m.direction;
+    ctx.save(); ctx.beginPath(); ctx.rect(m.x, m.y, m.w, m.h); ctx.clip();
+    fill(m.x, m.y, m.w, m.h, false);
+    ctx.drawImage(m.from, m.x, m.y + offset);
+    ctx.drawImage(m.to, m.x, m.y + offset - m.direction * m.h);
+    ctx.restore();
+    if (state.page === 'info') rect(16, 23, 96, 20);
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; render(); });
+  }
 
   const mod = (value, length) => ((value % length) + length) % length;
   const currentTags = () => state.collection === "my" ? state.myTags : state.findTags;
@@ -161,7 +203,7 @@
   function renderEditorMenu() { renderList("EDIT MENU", editorItems, state.editorIndex); }
   function renderConfirm() { header(state.confirm.title); rect(12, 18, 104, 23); const scale = textWidth(state.confirm.value, 2) <= 90 ? 2 : 1; center(25, state.confirm.value, scale); footer("BACK OR OK"); }
   function renderNotice() { header(state.notice.title); rect(12, 17, 104, 29); center(23, state.notice.primary); center(35, state.notice.secondary); footer(state.notice.help || "BACK"); }
-  function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); if (!state.silent) { fill(24, 31, 37, 11); text(34, 33, "OFF", 1, false); text(75, 33, "ON"); } else { text(34, 33, "OFF"); fill(67, 31, 37, 11); text(79, 33, "ON", 1, false); } center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ BACK OK"); }
+  function renderSettings() { header("SILENT"); center(18, "DISCOVERY"); rect(22, 29, 84, 15); center(33, state.silent ? "ON" : "OFF"); center(45, `SILENT ${state.silent ? "ON" : "OFF"}`); footer("▲ ▼ BACK OK"); }
   function renderInfo() { const values = [["BATTERY", "86%"], ["VERSION", "0.1.0"], ["CARD ID", "A7K9P2Q4"]]; const [name, value] = values[state.infoIndex]; header("INFO"); center(14, name); rect(16, 23, 96, 20); center(26, value, textWidth(value, 2) <= 82 ? 2 : 1); progress(3, state.infoIndex + 1, 47); footer("▲ ▼ BACK"); }
   function renderMatch() { header(state.page === "muted" ? "MUTED" : "MATCH"); center(14, state.page === "muted" ? "MATCH PAUSED" : "MATCHED TAG"); if (state.page !== "match" || state.blink) center(22, state.match?.tag || "INVESTOR", 2); if (state.page === "muted") center(45, "RETURNING HOME"); else { fill(39, 41, 50, 10); text(52, 43, "MUTE", 1, false); footer("MUTE"); } }
   function renderLifecycle() { const copy = { "boot-logo": ["", "IHERE.NO"], "boot-starting": ["IHERE", "STARTING 1/2"], "boot-loading": ["IHERE", "LOADING 2/2"], "provision-pre": ["IHERE", "NO KEY|PROVISION"], provisioning: ["IHERE", "PROVISIONING|PLEASE WAIT"], "provision-ready": ["IHERE", "READY|AUTH OK"], "provision-failed": ["IHERE", "NO KEY|TRY AGAIN"], "provision-limited": ["IHERE", "LIMITED|PROVISION"], "provision-revoked": ["IHERE", "REVOKD|LOCKED"], rma: ["IHERE", "RMA|SERVICE"] }[state.lifecycle];
@@ -184,6 +226,7 @@
     else if (["match", "muted"].includes(state.page)) renderMatch();
     else if (state.page === "confirm" || state.page === "leaveConfirm") renderConfirm();
     else if (state.page === "notice") renderNotice();
+    paintScroll();
     updateChrome();
   }
 
@@ -223,6 +266,7 @@
   function muteMatch() { if (state.page !== "match") return; state.page = "muted"; state.blink = false; setTimeout(() => { if (state.page === "muted") { state.match = null; state.page = "home"; render(); } }, 900); }
   function endMatch() { if (!state.match) return; state.match = null; state.page = state.resumePage === "match" ? "home" : state.resumePage; render(); }
   function resetCard() {
+    stopScroll();
     const sequence = ++resetSequence;
     state = defaultState();
     state.lifecycle = "boot-logo";
@@ -234,6 +278,21 @@
   }
 
   function press(key) {
+    const before = selectionViewport();
+    const directional = key === 'UP' || key === 'DOWN' || (key === 'OK' && state.page === 'draft');
+    // Retarget from the actual visible pixels, including an unfinished scroll.
+    const from = directional && before ? snapshotViewport(before) : null;
+    if (!directional) stopScroll();
+    applyPress(key);
+    const after = selectionViewport();
+    if (from && after && before.key === after.key && before.value !== after.value) {
+      stopScroll(); render();
+      const to = snapshotViewport(after);
+      scrollMotion = { ...after, page: state.page, from, to, direction: key === 'UP' ? -1 : 1, start: performance.now() };
+      render();
+    }
+  }
+  function applyPress(key) {
     state.pressed = key;
     if (key === "BACK") key = "CANCEL";
     if (state.lifecycle) { render(); setTimeout(() => { state.pressed = ""; render(); }, 130); return; }
@@ -281,6 +340,7 @@
   }
 
   function loadScenario(scenario) {
+    stopScroll();
     state = defaultState();
     const lifecycle = ["boot-logo", "boot-starting", "boot-loading", "provision-pre", "provisioning", "provision-ready", "provision-failed", "provision-limited", "provision-revoked", "rma"];
     if (lifecycle.includes(scenario)) { state.lifecycle = scenario; render(); return; }
