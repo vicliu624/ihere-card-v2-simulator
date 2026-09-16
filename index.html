@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=bold-grooves-v36" />
+    <link rel="stylesheet" href="styles.css?v=rounded-grooves-v37" />
   </head>
   <body>
     <main class="page-shell">
@@ -139,23 +139,16 @@
             </svg>
             <svg class="panel-etching" viewBox="0 0 52 82" preserveAspectRatio="none" aria-hidden="true" focusable="false">
               <defs>
-                <linearGradient id="groove-depth" x1="0" y1="0" x2="1" y2="0">
-                  <stop stop-color="#000000"/><stop offset=".2" stop-color="#050605"/>
-                  <stop offset=".75" stop-color="#0b0e0a"/><stop offset=".9" stop-color="#3c4436"/>
-                  <stop offset="1" stop-color="#737e65"/>
-                </linearGradient>
-                <pattern id="diagonal-etch" width="4.6" height="4.6" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
-                  <rect width="4.6" height="4.6" fill="#a9b19c"/>
-                  <rect x=".15" width="2.5" height="4.6" fill="url(#groove-depth)"/>
-                  <path d="M.15 0 V4.6" stroke="#000" stroke-width=".24"/>
-                  <path d="M2.75 0 V4.6" stroke="#dce1d3" stroke-width=".3"/>
-                  <path d="M4.4 0 V4.6" stroke="#505948" stroke-width=".35"/>
-                </pattern>
-                <mask id="etch-mask"><path d="M6 38 H46 L48 40 V74 L45 77 H7 L4 74 V40 Z" fill="white"/><path d="M16 66.5 H36 L38 68.5 V72.5 L36 74.5 H16 L14 72.5 V68.5 Z" fill="black"/></mask>
+                <linearGradient id="lower-graphite" x2=".6" y2="1"><stop stop-color="#383d39"/><stop offset="1" stop-color="#212622"/></linearGradient>
+                <path id="rounded-slots" d="M7 44 L11 40 M7 50 L17 40 M7 56 L23 40 M7 62 L29 40 M9 66 L35 40 M15 66 L41 40 M21 66 L45 42 M27 66 L45 48 M33 66 L45 54 M39 66 L45 60"/>
               </defs>
-              <path d="M6 38 H46 L48 40 V74 L45 77 H7 L4 74 V40 Z" fill="url(#diagonal-etch)" mask="url(#etch-mask)"/>
-              <path d="M6 38 H46 L48 40 V74 L45 77 H7 L4 74 V40 Z" fill="none" stroke="#505b44" stroke-width=".2"/>
-              <path d="M16 66.5 H36 L38 68.5 V72.5 L36 74.5 H16 L14 72.5 V68.5 Z" fill="#0c110a" stroke="#525e46" stroke-width=".22"/>
+              <path d="M6 37.8 H46 L48 40 V74 L45 77 H7 L4 74 V40 Z" fill="url(#lower-graphite)" stroke="#505850" stroke-width=".18"/>
+              <g fill="none" stroke-linecap="round">
+                <use href="#rounded-slots" transform="translate(.16 .22)" stroke="#69736a" stroke-width="3.3"/>
+                <use href="#rounded-slots" stroke="#0b100c" stroke-width="3.15"/>
+                <use href="#rounded-slots" transform="translate(.1 .12)" stroke="#171e18" stroke-width="2.3"/>
+              </g>
+              <path d="M16 68 H36 L38 70 V72.5 L36 74.5 H16 L14 72.5 V70 Z" fill="#1a201b" stroke="#465047" stroke-width=".18"/>
               <g transform="scale(.10856 .10789)"><use href="#panel-screw" x="49" y="700"/><use href="#panel-screw" x="428" y="700"/></g>
             </svg>
             <div class="card-topline">
