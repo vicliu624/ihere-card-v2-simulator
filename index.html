@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="iHere Card simulator with three front buttons and a pressable side wheel." />
     <title>iHere Card V2 Simulator</title>
-    <link rel="stylesheet" href="styles.css?v=no-back-v28" />
+    <link rel="stylesheet" href="styles.css?v=hold-wheel-v29" />
   </head>
   <body>
     <main class="page-shell">
@@ -13,8 +13,8 @@
         <p class="eyebrow">STATIC INTERACTION PROTOTYPE</p>
         <h1>iHere Card V2 simulator</h1>
         <p>
-          A 128×64 iHere Card with MENU and MUTE on the front and a pressable wheel on the right edge.
-          Scroll or swipe the wheel to move; click or tap it to confirm.
+          A 128×64 iHere Card with MUTE on the front and a pressable wheel on the right edge.
+          Scroll or swipe to move; tap the wheel to confirm; hold it for the menu.
         </p>
       </header>
 
@@ -161,7 +161,6 @@
               <circle cx="24.5" cy="6.5" r="1.25" fill="#060b04" stroke="#8b9880" stroke-width=".15"/>
               <use href="#panel-screw" transform="translate(5.32 4.64) scale(.10856 .10789)"/>
               <rect x="4.35" y="10.2" width="30.3" height="15.6" rx=".45" fill="#060b04" stroke="#a0aa92" stroke-width=".15"/>
-              <path d="M10 27.6 H29 L30.5 29.1 V34 L29 35.4 H10 L8.5 34 V29.1 Z" fill="#20271b" stroke="#69735b" stroke-width=".16"/>
               <path d="M36 10.5 V33.5" stroke="#10170c" stroke-width=".3"/>
               <path d="M5.5 9.1 H10 M29 9.1 H33.5 M15.5 36 H23.5" stroke="#c07636" stroke-width=".3" fill="none"/>
               <g transform="translate(-1 0)">
@@ -174,10 +173,9 @@
               <canvas id="device-screen" width="128" height="64" aria-label="128 by 64 monochrome iHere Card screen"></canvas>
             </div>
 
-            <div class="hardware-controls" aria-label="Two front buttons and a side wheel">
+            <div class="hardware-controls" aria-label="One front button and a pressable side wheel">
               <div class="control-rail" aria-label="Right-hand hardware control rail">
 
-                <button class="device-key key-menu" data-key="MENU" type="button"><span>MENU</span></button>
 
 
                 <button class="device-key key-mute" data-key="MUTE" type="button"><span>MUTE</span></button>
@@ -202,7 +200,7 @@
                   <path d="M142 40 V143" stroke="#080e05" stroke-width="5"/>
                 </svg>
               </div>
-              <button id="side-wheel" class="side-wheel" type="button" aria-label="Side wheel: scroll up or down, press to confirm" aria-describedby="wheel-help">
+              <button id="side-wheel" class="side-wheel" type="button" aria-label="Side wheel: scroll to move, tap to confirm, hold for menu" aria-describedby="wheel-help">
                 <span class="wheel-drum" aria-hidden="true"></span>
               </button>
             </div>
@@ -217,21 +215,21 @@
             </article>
             <article class="callout callout-menu">
               <p class="eyebrow">TASK CONTROL</p>
-              <h3>MENU</h3>
-              <p>MENU opens the main menu or returns one level. In the editor it opens editing tools. Confirmations use the wheel to choose NO or YES, then press to apply.</p>
+              <h3>HOLD WHEEL · MENU</h3>
+              <p>Hold the wheel for 0.65 seconds to open the main menu or return one level. In the editor it opens editing tools. Confirmations use the wheel to choose NO or YES, then press to apply.</p>
             </article>
             <article class="callout callout-mute">
               <p class="eyebrow">ALERT INTERRUPT</p>
               <h3>MUTE</h3>
-              <p>A smaller red key below the wheel armor stops the current Match. Its compact shape separates this occasional action from MENU.</p>
+              <p>A smaller red key below the wheel armor stops the current Match. The wheel handles navigation; MUTE stays immediately accessible.</p>
             </article>
           </aside>
         </section>
       </section>
     </main>
 
-    <script src="hardware-layout.js?v=no-back-v28"></script>
+    <script src="hardware-layout.js?v=hold-wheel-v29"></script>
     <script src="tag-vocabulary.js?v=canonical-1019"></script>
-    <script src="app.js?v=no-back-v28"></script>
+    <script src="app.js?v=hold-wheel-v29"></script>
   </body>
 </html>

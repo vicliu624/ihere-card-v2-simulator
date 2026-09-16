@@ -138,7 +138,7 @@
   function italicCenter(y, value, scale = 1, on = true) { italicText(Math.floor((WIDTH - textWidth(value, scale) - 3) / 2), y, value, scale, on); }
   function clear() { fill(0, 0, WIDTH, HEIGHT, false); }
   function header(title) { fill(0, 0, WIDTH, 10); text(5, 1, title, 1, false); }
-  function footer(help) { fill(0, 53, WIDTH, 1); if (help) center(56, help); }
+  function footer(help) { fill(0, 53, WIDTH, 1); if (help) center(56, help.replace('MENU', 'HOLD MENU')); }
   function progress(count, active) {
     if (!count) return;
     const gap = count > 1 ? 1 : 0;
@@ -383,13 +383,12 @@
   const wheel = document.getElementById("side-wheel");
   function alignCallouts() {
     const stageRect = document.querySelector(".card-stage").getBoundingClientRect();
-    const menuRect = document.querySelector(".key-menu").getBoundingClientRect();
     const muteRect = document.querySelector(".key-mute").getBoundingClientRect();
     const wide = window.matchMedia("(min-width: 1251px)").matches;
     const wheelRect = wheel.getBoundingClientRect();
     let nextTop = 0;
     [[".callout-navigate", wheelRect.top + wheelRect.height / 2],
-      [".callout-menu", menuRect.top + menuRect.height / 2],
+      [".callout-menu", wheelRect.top + wheelRect.height * .85],
       [".callout-mute", muteRect.top + muteRect.height / 2]].forEach(([selector, target]) => {
       const callout = document.querySelector(selector);
       const height = callout.getBoundingClientRect().height;
@@ -408,6 +407,8 @@
   let lastWheelTime = 0;
   let gesture = null;
   let suppressWheelClick = false;
+  let holdTimer = 0;
+  function cancelHold() { clearTimeout(holdTimer); holdTimer = 0; wheel.classList.remove('is-holding'); }
   function rollWheel(direction) {
     wheelOffset += direction * 6;
     wheel.style.setProperty("--wheel-angle", `${wheelOffset}deg`);
@@ -426,21 +427,35 @@
   }, { passive: false });
   wheel.addEventListener("pointerdown", (event) => {
     if (!event.isPrimary || event.button !== 0) return;
+    cancelHold();
     suppressWheelClick = false;
     gesture = { id: event.pointerId, y: event.clientY, startY: event.clientY, startX: event.clientX };
     wheel.setPointerCapture(event.pointerId);
+    const pageAtPress = state.page;
+    const resetAtPress = resetSequence;
+    wheel.classList.add('is-holding');
+    holdTimer = setTimeout(() => {
+      if (!gesture || suppressWheelClick || state.page !== pageAtPress || resetSequence !== resetAtPress) { cancelHold(); return; }
+      suppressWheelClick = true;
+      gesture.held = true;
+      cancelHold();
+      press('MENU');
+    }, 650);
   });
   wheel.addEventListener("pointermove", (event) => {
     if (!gesture || gesture.id !== event.pointerId) return;
-    if (Math.hypot(event.clientY - gesture.startY, event.clientX - gesture.startX) > 7) suppressWheelClick = true;
+    if (gesture.held) return;
+    if (Math.hypot(event.clientY - gesture.startY, event.clientX - gesture.startX) > 7) { suppressWheelClick = true; cancelHold(); }
     const delta = event.clientY - gesture.y;
     const steps = Math.floor(Math.abs(delta) / 18);
     for (let i = 0; i < steps; i++) rollWheel(Math.sign(delta));
     if (steps) gesture.y += Math.sign(delta) * steps * 18;
   });
-  wheel.addEventListener("pointerup", () => { gesture = null; });
-  wheel.addEventListener("pointercancel", () => { gesture = null; suppressWheelClick = true; });
-  wheel.addEventListener("lostpointercapture", () => { gesture = null; });
+  wheel.addEventListener("pointerup", () => { cancelHold(); gesture = null; });
+  wheel.addEventListener("pointercancel", () => { cancelHold(); gesture = null; suppressWheelClick = true; });
+  wheel.addEventListener("lostpointercapture", () => { cancelHold(); gesture = null; });
+  wheel.addEventListener('contextmenu', event => event.preventDefault());
+  window.addEventListener('blur', () => { cancelHold(); gesture = null; suppressWheelClick = true; });
   wheel.addEventListener("click", (event) => {
     if (suppressWheelClick && event.detail !== 0) { suppressWheelClick = false; return; }
     press("OK");

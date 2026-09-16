@@ -68,6 +68,7 @@ h1 { margin-bottom: 14px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: .98;
 .wheel-drum { position: absolute; display: block; inset: 0; width: 100%; height: 100%; border: .25cqw solid #203842; border-radius: 50%; background: radial-gradient(circle, #425b66 0 58%, transparent 59%), repeating-conic-gradient(from var(--wheel-angle, 0deg), #b8cbd0 0deg 2deg, #324b56 2deg 10deg, #132b35 10deg 20deg); box-shadow: inset 0 0 0 .55cqw #1a323c, inset 0 0 0 .9cqw #9aafb8; transition: transform 100ms ease; }
 .side-wheel:active .wheel-drum, .side-wheel.is-pressed .wheel-drum { transform: translateX(-.45cqw); }
 .side-wheel:focus-visible .wheel-drum { box-shadow: inset 0 0 0 .5cqw #84d8d2, inset 0 0 0 1cqw #1a323c; }
+.side-wheel.is-holding .wheel-drum { filter: brightness(1.25); transform: translateX(-.45cqw); }
 .wheel-housing { position: absolute; z-index: 6; left: 73.076923%; top: 5.487805%; width: 28.846154%; height: 23.170732%; pointer-events: none; filter: drop-shadow(.3cqw .65cqw .4cqw #000b); }
 .wheel-housing svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .device-footnote { display: none; }
