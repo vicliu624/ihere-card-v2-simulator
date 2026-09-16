@@ -77,9 +77,7 @@
       home: [state.homeIndex, 8, 16, 112, 21],
       myBrowse: [state.collectionIndex, 7, 12, 107, 35],
       findBrowse: [state.collectionIndex, 7, 12, 107, 35],
-      menu: [state.menuIndex, 7, 11, 114, 38],
-      action: [state.actionIndex, 7, 11, 114, 38],
-      editorMenu: [state.editorIndex, 7, 11, 114, 38],
+      // Fully visible menus keep their text stationary; only focus changes.
       info: [state.infoIndex, 17, 12, 94, 30],
       settings: [Number(state.silent), 23, 30, 82, 13]
     };
